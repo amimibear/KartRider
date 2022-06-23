@@ -4,26 +4,27 @@
 using namespace std;
 #define N 26//小屋边长
 
-int o=0,a[N+2][N+2],s,f[9][600],g[9],m=140000;
+int o=0,a[N+2][N+2],s,f[9][600],g[9],m=142604;
 int xh[100],yh[100],dh[100];
 int check(int h);
 void init();
-
-int FJ = 10; //林中飞机个数
+//问卷6
+int BB = 0; //8*8个数
+int FJ = 0; //林中飞机个数
 int JT = 0; //神翼祭坛个数
 int TL = 0; //精灵塔楼个数
 int ZX = 0; //臻享环绕个数
-int XX = 2; //小新雕像个数
-int PZB = 6; //拍照板个数
-int MG = 1; //有无魔怪
-int CB = 1; //有无怪诞城堡
-int YL = 1; //有无永恒之月
-int MT = 1; //有无魔毯
+int XX = 0; //小新雕像个数
+int PZB =0; //拍照板个数
+int MG = 0; //有无魔怪
+int CB = 0; //有无怪诞城堡
+int YL = 0; //有无永恒之月
+int MT = 0; //有无魔毯
 
-int HYB = 100; //sonic合影板个数（默认足够）
+int XK = 0; //有无新秀相框（不影响布局）
+int DZ = 0; //有无音阶地砖（不影响布局）
 int LP = 100; //我的小屋路牌个数（默认足够）
-int XK = 1; //有无新秀相框（不影响布局）
-int DZ = 1; //有无音阶地砖（不影响布局）
+int HYB = 100; //sonic合影板个数（默认足够）
 
 int main()
 {
@@ -42,7 +43,7 @@ int main()
     
     int n[9];
     for(int o6=0;o6<=1;o6++)
-    for(n[8]=2;n[8]>=0;n[8]--)
+    for(n[8]=BB;n[8]>=0;n[8]--)
     for(n[7]=CB;n[7]>=0;n[7]--)
     for(n[6]=o6?(N*N-80-64*n[8]-49*n[7])/36:min(1+FJ+JT,N*N-80-64*n[8]-49*n[7]);n[6]>=(o6?min(1+FJ+JT,N*N-80-64*n[8]-49*n[7])+1:0);n[6]--)//先从1+FJ+JT搜，再从最大搜
     for(n[5]=(N*N-80-64*n[8]-49*n[7]-36*n[6])/25;n[5]>=0;n[5]--)
@@ -87,6 +88,7 @@ int main()
                     fout.open("out.txt",ios::out);
                     fout<<num<<endl;
                     for(int i=0;i<num;i++) fout<<dh[i]<<' '<<xh[i]<<' '<<yh[i]<<endl;
+                    fout<<ff<<endl;
                     fout.close();
                 }
             }
