@@ -8,7 +8,7 @@ int o=0,a[N+2][N+2],s,f[9][600],g[9],m=142604;
 int xh[100],yh[100],dh[100];
 int check(int h);
 void init();
-//问卷6
+
 int BB = 0; //8*8个数
 int FJ = 0; //林中飞机个数
 int JT = 0; //神翼祭坛个数
