@@ -23,7 +23,7 @@ dp, tp, dp2 = {}, {}, {}
 
 # dp
 
-with open("dp.csv", newline="") as f:
+with open("danpin.csv", newline="") as f:
     reader = csv.reader(f)
     for row in reader:
         if row[0] in dp:
@@ -34,21 +34,21 @@ with open("dp.csv", newline="") as f:
 
 print(dp2)
 
-with open("dp0.csv", "w", newline="") as f:
+with open("danpin0.csv", "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerows(sorted(list(dp.items())+list(dp2.items()),key=lambda x:(-x[1],x[0])))
 
 
 # tp
 
-# with open("tp.csv", newline="") as f:
+# with open("taopin.csv", newline="") as f:
 #     reader = csv.reader(f)
 #     for row in reader:
 #         if row[0] in tp:
 #             print(row)
 #             continue
 #         tp[row[0]]=int(row[1])
-# with open("tp.csv", "w", newline="") as f:
+# with open("taopin.csv", "w", newline="") as f:
 #     writer = csv.writer(f)
 #     writer.writerows(sorted(list(tp.items()),key=lambda x:(-x[1],x[0])))
 

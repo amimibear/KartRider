@@ -6,9 +6,6 @@ from itertools import groupby
 import re
 import csv
 
-
-
-
 # time.sleep(10)
 
 # im = ImageGrab.grab()  # X1,Y1,X2,Y2
@@ -20,19 +17,6 @@ import csv
 #     im.save(f"a0{i}.png")
 
 # exit()
-
-
-# from cnocr import CnOcr
-
-# img_fp = 'box05.png'
-# ocr = CnOcr() 
-# out = ocr.ocr(img_fp)
-
-# print(out)
-
-# exit()
-
-
 
 dp, tp = {}, {}
 double = {'多彩气球炫光':[44,45],'汽车之家气球':[39,42],'黑妞生日气球':[36,43],'跑跑新生服饰':[27,34],'跑跑新生发型':[26,27]}
@@ -47,13 +31,13 @@ dp2 =  {'多彩气球炫光[1]':44,
         '跑跑新生发型[1]': 26,
         '跑跑新生发型[2]': 27,
         } # 这些东西竟然有两个value
-with open("dp.csv", newline="") as f:
+with open("danpin.csv", newline="") as f:
     reader = csv.reader(f)
     for row in reader:
         if row[0] in dp:
             print('wait!!!!!!!!!!!')
         dp[row[0]]=int(row[1])
-with open("tp.csv", newline="") as f:
+with open("taopin.csv", newline="") as f:
     reader = csv.reader(f)
     for row in reader:
         tp[row[0]]=int(row[1])
@@ -215,9 +199,9 @@ for id in range(1000000):
                 else:
                     t.append(w)
     # print(dp,'\n',tp,'\n')
-    with open("dp.csv", "w", newline="") as f:
+    with open("danpin.csv", "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(sorted(list(dp.items())+list(dp2.items()),key=lambda x:(-x[1],x[0])))
-    with open("tp.csv", "w", newline="") as f:
+    with open("taopin.csv", "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(sorted(list(tp.items()),key=lambda x:(-x[1],x[0])))
