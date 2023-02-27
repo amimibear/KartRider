@@ -1,6 +1,5 @@
 # KartRider
 跑跑卡丁车手游工具包
-a toolkit of KartRider
 
 ## XiaoWu
 小屋繁荣度
