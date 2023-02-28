@@ -1,7 +1,7 @@
 # KartRider
 跑跑卡丁车手游工具包
 
-## Xiaowu
+## XiaoWu
 定制化小屋最高繁荣度方案
 
 ## PinJian
