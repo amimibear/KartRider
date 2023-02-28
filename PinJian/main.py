@@ -42,13 +42,13 @@ with open("taopin.csv", newline="") as f:
     for row in reader:
         tp[row[0]]=int(row[1])
 
-ff = open('data4.txt', 'w')
+ff = open('data/data5.txt', 'w')
 
 for id in range(1000000):
     print(id)
     im = ImageGrab.grab(bbox=(400, 130, 1340, 1160))  # X1,Y1,X2,Y2
     # # time.sleep(5)
-    im.save(f"img4/{id}.png")
+    im.save(f"img/img5/{id}.png")
 
     reader = easyocr.Reader(['ch_sim','en']) 
     # reader = easyocr.Reader(['ch_sim']) 
@@ -124,9 +124,11 @@ for id in range(1000000):
             if s[i:i+4]=='1000' or s[i:i+4]=='2023' or s[i:i+4]=='2022':
                 s = s[:i]+' '+s[i+4:]
         
-        m = {1:{'〈':'(','〉':')','孑':'子','芾':'带','麇':'麋','圭':'主','曰':'日','居':'尾','爰':'爱','肘':'时','魃':'魅'},
-             2:{'字航':'宇航','-夏':'一夏','2翼':'之翼','2星':'之星','7星':'之星','自色':'白色','滨o':'滨DJ','揭蛋':'捣蛋','萌鬼':'萌兔','告自':'告白','人7':'人Z','黑自':'黑白','末来':'未来','=角':'三角',
-                '酉几':'西几','月镜':'目镜','-击':'一击','士著':'土著','@P':'CP','挑-':'挑一','自羊':'白羊','塞冰':'寒冰','战土':'战士','尺军':'R军','捐挥':'指挥'}}
+        dd = ['动萌兔花束','心动萌兔套装女发型','子背带裤(男)','联赛无畏服(女)','WKC 气球','WKC 趣味眼镜','C助威头盔(女)','KLC助威头盔(女)','KLC助威头盔(男)','LC助威头盔(男)','C助威头盔(男)','二项循环炫光','月气球','青蛙头饰','FormulaC气球','FormulaE气球','瑗逮面饰','强红色喷漆','边太阳镜','博士紫色喷漆','浪漫枫情帽男)','-叶知秋眼镜','|雨伞头饰','祥云气球','万里挑气球','小小悟空的金箍棒','心相印发箍','音乐气球']
+        
+        m = {1:{'〈':'(','〉':')','孑':'子','芾':'带','麇':'麋','圭':'主','曰':'日','居':'尾','爰':'爱','肘':'时','魃':'魅','酉':'西','免':'兔','泠':'冷','=':'三'},
+             2:{'字航':'宇航','-夏':'一夏','2翼':'之翼','2星':'之星','7星':'之星','自色':'白色','滨o':'滨DJ','揭蛋':'捣蛋','萌鬼':'萌兔','告自':'告白','人7':'人Z','黑自':'黑白','末来':'未来','二角':'三角',
+                '月镜':'目镜','-击':'一击','士著':'土著','@P':'CP','挑-':'挑一','自羊':'白羊','塞冰':'寒冰','战土':'战士','尺军':'R军','捐挥':'指挥','OJ':'DJ','萸雄':'英雄','自云':'白云','护日':'护目','@博':'Q博','考虎':'老虎'}}
         for size in range(1,3):
             for i in range(len(s)-size+1):
                 w = s[i:i+size]
@@ -163,7 +165,7 @@ for id in range(1000000):
             if o==1: # 单品
                 if w.isdigit():
                     if not t: # 防止 t[-1] 报错
-                        ff.write(f'\n!! {w} {id} {s}\n')
+                        ff.write(f'\n??? {w} {id} {s}\n')
                         continue
                     # if len(t)!=1:
                     #     print(id,'too long ',ss,' ! ',s)
@@ -174,15 +176,16 @@ for id in range(1000000):
                     sp = '+'.join(t)
                     ls = t[-1]
                     t = []
+                    if ss in dd or ss=='气球' and w in [91,39,31,36,41] or ss=='天气球' and w in [81,44]:
+                        continue
                     if ls in dp and dp[ls]==w: # 最后一位有一样的不要了 防止前面有乱七八糟的东西
                         continue
                     if sp in tp and tp[sp]==w: # 套品有一样的也不要了
                         continue
                     if ss in dp and dp[ss]!=w: # 处理同物品不同value
-                        if w<20 or w>200 or w%100==dp[ss]: # 可能前面多个1
-                            continue
-                        else:
+                        if not (w<20 or w>200 or w%100==dp[ss]): # 可能前面多个1
                             ff.write(f'\n!!! {id} {ss} {w} {s}\n\n')
+                        continue
                     dp[ss] = w
                 else:
                     t.append(w)
@@ -194,10 +197,9 @@ for id in range(1000000):
                     ss = '+'.join(t)
                     t = []
                     if ss in tp and tp[ss]!=w: # 处理同物品不同value
-                        if w<20 or w>200 or w%100==dp[ss]: # 可能前面多个1
-                            continue
-                        else:
+                        if not (w<20 or w>200 or w%100==tp[ss]): # 可能前面多个1
                             ff.write(f'\n!!! {id} {ss} {w} {s}\n\n')
+                        continue
                     tp[ss] = w            
                 else:
                     t.append(w)
