@@ -42,13 +42,13 @@ with open("taopin.csv", newline="") as f:
     for row in reader:
         tp[row[0]]=int(row[1])
 
-ff = open('data3.txt', 'w')
+ff = open('data4.txt', 'w')
 
 for id in range(1000000):
-    print(id,end=' ')
+    print(id)
     im = ImageGrab.grab(bbox=(400, 130, 1340, 1160))  # X1,Y1,X2,Y2
     # # time.sleep(5)
-    im.save(f"img3/{id}.png")
+    im.save(f"img4/{id}.png")
 
     reader = easyocr.Reader(['ch_sim','en']) 
     # reader = easyocr.Reader(['ch_sim']) 
@@ -75,7 +75,7 @@ for id in range(1000000):
         ll.append(''.join(l))
     
     for s in ll:
-        # print(s)
+        print(s)
         ff.write(str(id)+' '+s+'\n')
         while '[' in s or ']' in s:
             i = 0
@@ -124,9 +124,9 @@ for id in range(1000000):
             if s[i:i+4]=='1000' or s[i:i+4]=='2023' or s[i:i+4]=='2022':
                 s = s[:i]+' '+s[i+4:]
         
-        m = {1:{'〈':'(','〉':')','孑':'子','芾':'带','麇':'麋','圭':'主','曰':'日','居':'尾','爰':'爱'},
+        m = {1:{'〈':'(','〉':')','孑':'子','芾':'带','麇':'麋','圭':'主','曰':'日','居':'尾','爰':'爱','肘':'时','魃':'魅'},
              2:{'字航':'宇航','-夏':'一夏','2翼':'之翼','2星':'之星','7星':'之星','自色':'白色','滨o':'滨DJ','揭蛋':'捣蛋','萌鬼':'萌兔','告自':'告白','人7':'人Z','黑自':'黑白','末来':'未来','=角':'三角',
-                '酉几':'西几','月镜':'目镜','-击':'一击','士著':'土著','@P':'CP','挑-':'挑一','自羊':'白羊','塞冰':'寒冰','战土':'战士','尺军':'R军'}}
+                '酉几':'西几','月镜':'目镜','-击':'一击','士著':'土著','@P':'CP','挑-':'挑一','自羊':'白羊','塞冰':'寒冰','战土':'战士','尺军':'R军','捐挥':'指挥'}}
         for size in range(1,3):
             for i in range(len(s)-size+1):
                 w = s[i:i+size]
@@ -139,12 +139,12 @@ for id in range(1000000):
                 elif s[i-3]=='5':
                     s = s[:i-3]+' S'+s[i-2:]
         
-        # print(s)
+        print(s)
         ff.write(str(id)+' '+s+'\n')
 
         # l = [w for w in sum([re.split("[:+/. ]", ''.join(j)) for i,j in groupby(re.sub(u'\\[.*?\\]','',s), key=lambda x: x.isdigit())],[]) if w]
         l = [w for w in sum([re.split("[';:+/., ]|`", ''.join(j)) for i,j in groupby(s, key=lambda x: x.isdigit() or x=='S')],[]) if w]
-        # print(l)
+        print(l)
         o = 0 # 1 单品 2 套品
         t = []
         for w in l:
@@ -162,6 +162,9 @@ for id in range(1000000):
                 w = w[2:]
             if o==1: # 单品
                 if w.isdigit():
+                    if not t: # 防止 t[-1] 报错
+                        ff.write(f'\n!! {w} {id} {s}\n')
+                        continue
                     # if len(t)!=1:
                     #     print(id,'too long ',ss,' ! ',s)
                     if int(w)>200 and w[-1]=='1':
@@ -179,7 +182,7 @@ for id in range(1000000):
                         if w<20 or w>200 or w%100==dp[ss]: # 可能前面多个1
                             continue
                         else:
-                            ff.write(f'\n!!! {w} {id} {s}\n\n')
+                            ff.write(f'\n!!! {id} {ss} {w} {s}\n\n')
                     dp[ss] = w
                 else:
                     t.append(w)
@@ -194,14 +197,14 @@ for id in range(1000000):
                         if w<20 or w>200 or w%100==dp[ss]: # 可能前面多个1
                             continue
                         else:
-                            ff.write(f'\n!!! {w} {id} {s}\n\n')
+                            ff.write(f'\n!!! {id} {ss} {w} {s}\n\n')
                     tp[ss] = w            
                 else:
                     t.append(w)
     # print(dp,'\n',tp,'\n')
     with open("danpin.csv", "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerows(sorted(list(dp.items())+list(dp2.items()),key=lambda x:(-x[1],x[0])))
+        writer.writerows(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])))
     with open("taopin.csv", "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(sorted(list(tp.items()),key=lambda x:(-x[1],x[0])))
