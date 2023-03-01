@@ -34,9 +34,9 @@ with open("danpin.csv", newline="") as f:
 
 print(dp2)
 
-with open("danpin0.csv", "w", newline="") as f:
+with open("danpin.csv", "w", newline="") as f:
     writer = csv.writer(f)
-    writer.writerows(sorted(list(dp.items())+list(dp2.items()),key=lambda x:(-x[1],x[0])))
+    writer.writerows(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])))
 
 
 # tp
