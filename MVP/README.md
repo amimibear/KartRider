@@ -1,5 +1,5 @@
 # 道具赛MVP分计算方式
-来源: [组队道具mvp分计算方式](https://tieba.baidu.com/p/6455555391)     [个人道具赛mvp分计算方式](https://tieba.baidu.com/p/6457567536)  
+来源: [组队道具mvp分计算方式](https://tieba.baidu.com/p/6455555391) & [个人道具赛mvp分计算方式](https://tieba.baidu.com/p/6457567536)  
   
 x = 攻击+干扰+防御  
 n = 名次  
