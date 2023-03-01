@@ -30,13 +30,16 @@ with open("danpin.csv", newline="") as f:
             dp2[row[0]]=int(row[1])
             print(row)
             continue
+        if row[0][1:] in dp:
+            print(row)
         dp[row[0]]=int(row[1])
 
 print(dp2)
 
-with open("danpin.csv", "w", newline="") as f:
+with open("danpin0.csv", "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerows(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])))
+    # writer.writerows([(i,j[0],j[1]) for i,j in enumerate(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])),1)])
 
 
 # tp
