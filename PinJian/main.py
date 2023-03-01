@@ -42,7 +42,7 @@ with open("taopin.csv", newline="") as f:
     for row in reader:
         tp[row[0]]=int(row[1])
 
-N = 6 
+N = 7
 ff = open(f'data/data{N}.txt', 'w')
 
 for id in range(1000000):
