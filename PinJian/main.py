@@ -5,6 +5,7 @@ import easyocr
 from itertools import groupby
 import re
 import csv
+import os
 
 # time.sleep(10)
 
@@ -43,18 +44,23 @@ with open("taopin.csv", newline="") as f:
         tp[row[0]]=int(row[1])
 
 N = 7
-ff = open(f'data/data{N}.txt', 'w')
 
-for id in range(1000000):
+folder = f'img/img{N}'
+if not os.path.exists(folder):
+    os.makedirs(folder)
+
+ff = open(f'data/data{N}.txt', 'w')
+reader = easyocr.Reader(['ch_sim','en']) 
+# for id in range(1000000):
+for id in range(1,6):
     print(id)
     im = ImageGrab.grab(bbox=(400, 130, 1340, 1160))  # X1,Y1,X2,Y2
     # # time.sleep(5)
     # im.save(f"img/img6/{id}.png")
 
-    reader = easyocr.Reader(['ch_sim','en']) 
     # reader = easyocr.Reader(['ch_sim']) 
     # # 读取图像
-    # result = reader.readtext(f'test1/3.png',detail=0)
+    # result = reader.readtext(f'img/img1/{id}.png',detail=0)
     result = reader.readtext(np.array(im),detail=0)
 
     o = 0
