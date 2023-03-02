@@ -45,7 +45,7 @@ with open("taopin.csv", newline="") as f:
     for row in reader:
         tp[row[0]]=int(row[1])
 
-N = 7
+N = 8
 
 folder = f'img/img{N}'
 if not os.path.exists(folder):
