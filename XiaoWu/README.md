@@ -3,7 +3,7 @@
 定制化小屋最高繁荣度方案
 
 使用方式：
-1.分别在main.cpp和fix.cpp中修改自己的摆件信息并运行（结果自动保存到out.txt和out_fix.txt）。
+1.分别在main.cpp和fix.cpp中修改自己的摆件信息并运行（结果自动保存到out.txt和out_fix.txt）。  
 2.分别运行plot.ipynb和plot_fix.ipynb，会将out.txt和和out_fix.txt中的方案可视化，比较哪个方案繁荣度更高。
 
 算法：
