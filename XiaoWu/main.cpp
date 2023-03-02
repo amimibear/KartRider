@@ -5,12 +5,12 @@
 using namespace std;
 #define N 26 //小屋边长
 
-int o=0,a[N+2][N+2],s,f[9][600],g[9],m=132145;
+int o=0,a[N+2][N+2],s,f[9][600],g[9],m=122145;
 int xh[100],yh[100],dh[100];
 int check(int h);
 void init();
 
-// // 顶配
+// 顶配
 // int BB = 2; //8*8个数
 // int FJ = 12; //林中飞机个数
 // int JT = 10; //神翼祭坛个数
@@ -27,21 +27,22 @@ void init();
 // int LP = 100; //我的小屋路牌个数（默认足够）
 // int HYB = 100; //sonic合影板个数（默认足够）
 
-int BB = 0; //8*8个数
-int FJ = 1; //林中飞机个数
-int JT = 1; //神翼祭坛个数
+// 修改以下部分
+int BB = 2; //8*8个数
+int FJ = 7; //林中飞机个数
+int JT = 0; //神翼祭坛个数
 int TL = 0; //精灵塔楼个数
 int ZX = 1; //臻享环绕个数
-int XX = 1; //小新雕像个数
+int XX = 0; //小新雕像个数
 int PZB =0; //拍照板个数
-int MG = 0; //有无魔怪
+int MG = 1; //有无魔怪
 int CB = 0; //有无怪诞城堡
 int YL = 1; //有无永恒之月
-int MT = 0; //有无魔毯
+int MT = 1; //有无魔毯
 int XK = 0; //有无新秀相框（不影响布局）
-int DZ = 14; //音阶地砖个数（不影响布局）
-int LP = 4; //我的小屋路牌个数（默认足够）
-int HYB = 11; //sonic合影板个数（默认足够）
+int DZ = 169; //音阶地砖个数（不影响布局，铺满为169）
+int LP = 10; //我的小屋路牌个数（默认足够）
+int HYB = 10; //sonic合影板个数（默认足够）
 
 
 int main()
@@ -61,7 +62,6 @@ int main()
 
     // for(int i=1;i<=8;i++) { cout<<i<<endl; for(int j=1;j<=9;j++) cout<<j<<':'<<f[i][j]<<' '; cout<<endl;} //调试用
 
-    return 0;
     int n[9];
     for(int o6=0;o6<=1;o6++)
     for(n[8]=BB;n[8]>=0;n[8]--)
