@@ -1,7 +1,7 @@
 # 藏珍馆 单品/套品品鉴
 原理：手机投屏到电脑，电脑实时对世界频道截图，然后用EasyOCR读取文字信息并处理。  
-由于只统计了世界频道发的数据，单品还不齐全，参考[这个文档](https://docs.qq.com/sheet/DZldVdXNmZHR2TXpC)补充。  
-欢迎大家在选单品时拉到最底部把已鉴定单品截图，共享到[这个文档](https://docs.qq.com/sheet/DR1JkTHF1RlNzUEFj)里，数据会被统计到上一个文档中。
+由于只统计了世界频道发的数据，单品还不齐全，参考[【品鉴图集】（By 酥诺 & 淦饭）](https://docs.qq.com/sheet/DZldVdXNmZHR2TXpC)补充。  
+欢迎大家在选单品时拉到最底部把已鉴定单品截图，共享到[品鉴截图在线收集，谢谢大家](https://docs.qq.com/sheet/DR1JkTHF1RlNzUEFj)里，数据会被统计到上一个文档中。
 
 ## 套品
 taopin.csv: (155个)
