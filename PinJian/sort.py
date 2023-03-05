@@ -1,46 +1,24 @@
-import numpy as np
-import time
-import pyscreenshot as ImageGrab
-import easyocr
-from itertools import groupby
-import re
+# 排序 查重 查少字
+
 import csv
 
 
-dp, tp, dp2 = {}, {}, {}
+dp, tp = {}, {}
 
-# dp2 =  {'多彩气球炫光[1]':44,
-#         '多彩气球炫光[2]':45,
-#         '汽车之家气球[紫]': 39,
-#         '汽车之家气球[黄]': 42,
-#         '黑妞生日气球[皇冠]': 36,
-#         '黑妞生日气球[帽子]': 43,
-#         '跑跑新生服饰[1]': 27,
-#         '跑跑新生服饰[2]': 34,
-#         '跑跑新生发型[1]': 26,
-#         '跑跑新生发型[2]': 27,
-#         } # 这些东西竟然有两个value
+reader = csv.reader(open("danpin.csv"))
+for row in reader:
+    if row[0] in dp:
+        print(row)
+        continue
+    dp[row[0]]=int(row[1])
 
-# dp
+for i in dp:
+    if i[1:] in dp: # 防止少一个字
+        print(i)
 
-with open("danpin.csv", newline="") as f:
-    reader = csv.reader(f)
-    for row in reader:
-        if row[0] in dp:
-            dp2[row[0]]=int(row[1])
-            print(row)
-            continue
-        if row[0][1:] in dp:
-            print(row)
-        dp[row[0]]=int(row[1])
-
-print(dp2)
-
-with open("danpin0.csv", "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerows(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])))
-    # writer.writerows([(i,j[0],j[1]) for i,j in enumerate(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])),1)])
-
+writer = csv.writer(open("danpin0.csv", "w"))
+writer.writerows(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])))
+# writer.writerows([(i,j[0],j[1]) for i,j in enumerate(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])),1)])
 
 # tp
 

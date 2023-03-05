@@ -34,19 +34,22 @@ dp2 =  {'多彩气球炫光[1]':44,
         '跑跑新生发型[男]': 26,
         '跑跑新生发型[女]': 27,
         } # 这些东西竟然有两个value
-with open("danpin.csv", newline="") as f:
-    reader = csv.reader(f)
-    for row in reader:
-        if row[0] in dp:
-            print('wait!!!!!!!!!!!')
-        dp[row[0]]=int(row[1])
-with open("taopin.csv", newline="") as f:
-    reader = csv.reader(f)
-    for row in reader:
-        tp[row[0]]=int(row[1])
+
+reader = csv.reader(open("danpin.csv"))
+for row in reader:
+    if row[0] in dp:
+        print('wait!!!!!!!!!!!')
+    dp[row[0]]=int(row[1])
+
+reader = csv.reader(open("taopin.csv"))
+for row in reader:
+    tp[row[0]]=int(row[1])
 
 
-N = 18
+N = 1
+while os.path.exists(f'data/data{N}.txt'):
+    N += 1
+ff = open(f'data/data{N}.txt', 'w')
 
 ocr = PaddleOCR(use_angle_cls=False, lang='ch') # need to run only once to download and load model into memory # ocr_version='PP-OCRv2'
 
@@ -55,7 +58,7 @@ ocr = PaddleOCR(use_angle_cls=False, lang='ch') # need to run only once to downl
 #     os.makedirs(folder)
 id0 = int(open(f'img/img/_ok.txt', 'r').read())+1
 # id0 = 2078
-ff = open(f'data/data{N}.txt', 'w')
+
 reader = easyocr.Reader(['ch_sim','en']) 
 for id in range(id0,1000000):
 # for id in range(1,6):
@@ -162,7 +165,7 @@ for id in range(id0,1000000):
              2:{'字航':'宇航','-夏':'一夏','2翼':'之翼','自色':'白色','滨o':'滨DJ','场o':'场DJ','揭蛋':'捣蛋','萌鬼':'萌兔','告自':'告白','人7':'人Z','黑自':'黑白','末来':'未来','二角':'三角',
                 '月镜':'目镜','-击':'一击','士著':'土著','@P':'CP','挑-':'挑一','自羊':'白羊','塞冰':'寒冰','战土':'战士','尺军':'R军','捐挥':'指挥','OJ':'DJ','萸雄':'英雄','精萸':'精英','萸灵':'英灵','自云':'白云','护日':'护目',
                 '@博':'Q博','考虎':'老虎','显景':'显影','浪浸':'浪漫','自天':'白天','自虎':'白虎','-足':'十足','闺蝥':'闺蜜','自槿':'白槿','紧色':'紫色','粉@':'粉色','手耷':'手套','丰播':'主播','宇护':'守护','花柬':'花束','法者':'法老','法茗':'法老',
-                '垂鬈':'垂髫','茗板':'老板','壬子':'王子','萝|':'萝卜','神赝':'神鹰','-步':'一步','杳花':'杏花'},
+                '垂鬈':'垂髫','茗板':'老板','壬子':'王子','萝|':'萝卜','神赝':'神鹰','-步':'一步','杳花':'杏花','鬼兔':'兔兔'},
              3:{'未未来':'未来'}}
         for size in range(1,4):
             for i in range(len(s)-size+1):
@@ -208,7 +211,7 @@ for id in range(id0,1000000):
                         w = w[:-1]
                     w = int(w)
                     ss = ''.join(t)
-                    ss = ss.replace('^','')
+                    ss = ss.replace('^','','|','_')
                     sp = '+'.join(t)
                     if sp[0]=='|':
                         sp = sp[1:]
@@ -266,9 +269,8 @@ for id in range(id0,1000000):
     open('img/img/_ok.txt', 'w').write(str(id))
 
     # print(dp,'\n',tp,'\n')
-    with open("danpin.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])))
-    with open("taopin.csv", "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(sorted(list(tp.items()),key=lambda x:(-x[1],x[0])))
+    writer = csv.writer(open("danpin.csv", "w"))
+    writer.writerows(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])))
+
+    writer = csv.writer(open("taopin.csv", "w"))
+    writer.writerows(sorted(list(tp.items()),key=lambda x:(-x[1],x[0])))
