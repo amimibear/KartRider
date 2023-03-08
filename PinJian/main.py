@@ -1,6 +1,4 @@
 import numpy as np
-import time
-import pyscreenshot as ImageGrab
 import easyocr
 from itertools import groupby
 import re
@@ -46,6 +44,9 @@ for row in reader:
     tp[row[0]]=int(row[1])
 
 
+del_img = []
+
+
 N = 1
 while os.path.exists(f'data/data{N}.txt'):
     N += 1
@@ -68,17 +69,19 @@ for id in range(id0,1000000):
     # im = ImageGrab.grab(bbox=(-1200, 30, -610, 870))  # X1,Y1,X2,Y2 ipad
     # # time.sleep(5)
     # im.save(f"img/img{N}/{id}.png")
-    save = 0 
-    result = ocr.ocr(f'img/img/{id}.png', cls=False) # PaddleOCR快，用来过滤
-    for idx in range(len(result)):
-        res = result[idx]
-        for line in res:
-            if '藏' in line[1][0]:
-                save = 1
-    if not save:
-        os.remove(f"img/img/{id}.png")
-        open('img/img/_ok.txt', 'w').write(str(id))
-        continue
+
+    # save = 0 
+    # result = ocr.ocr(f'img/img/{id}.png', cls=False) # PaddleOCR快，用来过滤
+    # for idx in range(len(result)):
+    #     res = result[idx]
+    #     for line in res:
+    #         if '藏' in line[1][0]:
+    #             save = 1
+    # if not save:
+    #     del_img.append(id)
+    #     os.remove(f"img/img/{id}.png")
+    #     open('img/img/_ok.txt', 'w').write(str(id))
+    #     continue
 
     save = 0
     result = reader.readtext(f'img/img/{id}.png',detail=0)
@@ -188,6 +191,8 @@ for id in range(id0,1000000):
         o = 0 # 1 单品 2 套品
         t = []
         for w in l:
+            if w[0]=='-':
+                w = w[1:]
             if w=='单品':
                 o = 1
                 continue
@@ -236,6 +241,7 @@ for id in range(id0,1000000):
                             ff.write(f'\n!!! {id} {ss} {w} {s}\n\n')
                         continue
                     dp[ss] = w
+                    # print('dp',ss,w)
                     save = 1
                 else:
                     t.append(w)
@@ -261,14 +267,19 @@ for id in range(id0,1000000):
                             ff.write(f'\n!!! {id} {ss} {w} {s}\n\n')
                         continue
                     tp[ss] = w
+                    # print('tp',ss,w)
                     save = 1        
                 else:
                     t.append(w)
     if not save:
         os.remove(f"img/img/{id}.png")
+        with open('del_img.txt', 'a') as f:
+            f.seek(0,2)
+            f.write(str(i)+'\n')
     open('img/img/_ok.txt', 'w').write(str(id))
 
     # print(dp,'\n',tp,'\n')
+
     writer = csv.writer(open("danpin.csv", "w"))
     writer.writerows(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])))
 
