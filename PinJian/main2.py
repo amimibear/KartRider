@@ -27,13 +27,13 @@ N = 1
 while os.path.exists(f'data/data{N}.txt'):
     N += 1
 
-reader = csv.reader(open("danpin19.1.csv"))
+reader = csv.reader(open("danpin22.0.csv"))
 for row in reader:
     if row[0] in dp:
         print('wait!!!!!!!!!!!')
     dp[row[0]]=int(row[1])
 
-reader = csv.reader(open("taopin19.1.csv"))
+reader = csv.reader(open("taopin22.0.csv"))
 for row in reader:
     tp[row[0]]=int(row[1])
 
@@ -54,10 +54,10 @@ id0 = int(open(f'img/_ok.txt', 'r').read())+1
 # ffe96c 黄 81~108
 # da664f 红 121～121
 
-cl = ['556ab6','c949e0','C949e0','ffe96c','da664f','fe96c','fe96C','o949e0','tfe96c']
+cl = ['556ab6','c949e0','ffe96c','da664f','o949e0','tfe96c','fe96c','e96c']
 
 # reader = easyocr.Reader(['ch_sim','en']) 
-for id in range(id0,id0+500):
+for id in range(id0,id0+1000):
 # for id in range(id0,1000000):
 # for id in range(41600,41601):
     print('\n',id)
@@ -105,16 +105,36 @@ for id in range(id0,id0+500):
         #         s = s[:i]+('O' if s[i+1].isupper() else 'o')+s[i+1:]
 
         # 处理颜色代码bug
+        ket = ['1','l','J'] # 把括号识别成这些
         for i in range(len(s)-6):
-            w = s[i:i+6]
+            for j in [0,1,2]:
+                w = s[i:i+6-j].lower()
+                if w in cl:
+                    l,r = i,i+6-j
+                    if i and s[i-1] in ket:
+                        l -= 1
+                    if i+6-j<len(s) and s[i+6-j]=='l' or s[i+6-j]=='J':
+                            r += 1
+                    if i+6-j<len(s) and s[i+6-j]=='1':
+                        if w[-4:] in ['6ab6','49e0']:
+                                r += 1
+                        # if w=='da664f':
+                        #     if i+9<len(s) and s[i+6]=='1' and s[i+7]=='1' and : # 1121怎么办？去前还是去后？
+
+                        if w[-4:] == 'e96c':
+                            if i+7-j<len(s) and (s[i+7-j]=='8' or s[i+7-j]=='9' or s[i+7-j]=='1'): # 黄色没有110+
+                                r += 1
+                    s = s[:l]+' '+s[r:]
+
+            w = s[i:i+6].lower()
             if w in cl:
                 l,r = i,i+6
-                if i and s[i-1]=='1' or s[i-1]=='l':
+                if i and s[i-1] in ket:
                     l -= 1
-                if i+6<len(s) and s[i+6]=='l':
+                if i+6<len(s) and s[i+6]=='l' or s[i+6]=='J':
                         r += 1
                 if i+6<len(s) and s[i+6]=='1':
-                    if w in ['556ab6','c949e0','C949e0','o949e0']:
+                    if w in ['556ab6','c949e0','o949e0']:
                             r += 1
                     # if w=='da664f':
                     #     if i+9<len(s) and s[i+6]=='1' and s[i+7]=='1' and : # 1121怎么办？去前还是去后？
@@ -124,18 +144,17 @@ for id in range(id0,id0+500):
                             r += 1
 
                 s = s[:l]+' '+s[r:]
-            w = s[i:i+5]
+            w = s[i:i+5].lower()
             if w in cl:
                 l,r = i,i+5
-                if i and s[i-1]=='1' or s[i-1]=='l':
+                if i and s[i-1] in ket:
                     l -= 1
-                if i+5<len(s) and s[i+5]=='l':
+                if i+5<len(s) and s[i+6]=='l' or s[i+6]=='J':
                         r += 1
                 if i+5<len(s) and s[i+5]=='1':
-                    if w in ['fe96c','fe96C']:
+                    if w=='fe96c':
                         if i+6<len(s) and (s[i+6]=='8' or s[i+6]=='9' or s[i+6]=='1'): # 黄色没有110+
                             r += 1
-
                 s = s[:l]+' '+s[r:]
 
         for i in range(len(s)-4):
@@ -159,7 +178,7 @@ for id in range(id0,id0+500):
         #         '垂鬈':'垂髫','茗板':'老板','壬子':'王子','萝|':'萝卜','神赝':'神鹰','-步':'一步','杳花':'杏花','鬼兔':'兔兔'},
         #      3:{'未未来':'未来'}}
         m = {1:{'：':':','（':'(','）':')','~':' ','|':' ','[':' ',']':' ','「':' ','－':'-'},
-             2:{'萝下':'萝卜','一女':'-女','一男':'-男'},
+             2:{'萝下':'萝卜','一女':'-女','一男':'-男','型十':'型+','诸能':'储能','翘翔':'翱翔','翅翘':'翅','倒到':'倒','不到':'不倒','游夹':'游侠'},
              3:{}}
         for size in range(1,4):
             for i in range(len(s)-size+1):
@@ -262,7 +281,11 @@ for id in range(id0,id0+500):
                     #     print(id,'too short ',w,' ! ',s)
                     w = int(w)
                     ss = '+'.join(t)
-                    ss = ss.replace('^','')
+                    if ss and ss[0]=='l':
+                        ss = ss[1:]
+                    if ss and ss[0]=='-':
+                        ss = ss[1:]
+                    # ss = ss.replace('^','')
                     t = []
                     print('tp',ss,w)
                     print('tp',ss,w,file=ff)
