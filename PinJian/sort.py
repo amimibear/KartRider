@@ -12,6 +12,14 @@ for row in reader:
         continue
     dp[row[0]]=int(row[1])
 
+# # merge
+# reader = csv.reader(open("danpin24.1.csv")) # 从这个文件中的所有都加入
+# for row in reader:
+#     if row[0] in dp and int(row[1])!=dp[row[0]]:
+#         print('不一样!',row)
+#         continue
+#     dp[row[0]]=int(row[1])
+
 for i in dp:
     if i[1:] in dp: # 防止少一个字
         print(i)

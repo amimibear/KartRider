@@ -27,13 +27,14 @@ N = 1
 while os.path.exists(f'data/data{N}.txt'):
     N += 1
 
-reader = csv.reader(open("danpin22.0.csv"))
+# 每次读最新的，没有筛选也没关系，之后通过delete.py直接筛掉
+reader = csv.reader(open("danpin.csv"))
 for row in reader:
     if row[0] in dp:
         print('wait!!!!!!!!!!!')
     dp[row[0]]=int(row[1])
 
-reader = csv.reader(open("taopin22.0.csv"))
+reader = csv.reader(open("taopin.csv"))
 for row in reader:
     tp[row[0]]=int(row[1])
 
@@ -54,13 +55,17 @@ id0 = int(open(f'img/_ok.txt', 'r').read())+1
 # ffe96c 黄 81~108
 # da664f 红 121～121
 
-cl = ['556ab6','c949e0','ffe96c','da664f','o949e0','tfe96c','fe96c','e96c']
+cls = ['556ab6',
+       'c949e0','o949e0',
+       'ffe96c','tfe96c',
+       'da664f']
 
 # reader = easyocr.Reader(['ch_sim','en']) 
 for id in range(id0,id0+1000):
 # for id in range(id0,1000000):
 # for id in range(41600,41601):
     print('\n',id)
+    print('\n',id,file=ff)
     save = 0 
     result = ocr.ocr(f'img/{id}.png', cls=False)
     result = [line[1][0] for res in result for line in res]
@@ -105,57 +110,46 @@ for id in range(id0,id0+1000):
         #         s = s[:i]+('O' if s[i+1].isupper() else 'o')+s[i+1:]
 
         # 处理颜色代码bug
+
         ket = ['1','l','J'] # 把括号识别成这些
-        for i in range(len(s)-6):
-            for j in [0,1,2]:
-                w = s[i:i+6-j].lower()
-                if w in cl:
-                    l,r = i,i+6-j
+        
+        for j in [6,5,4]:
+            for i in range(len(s)-j): # 后j位一样
+                w = s[i:i+j].lower()
+                if sum(w==cl[-j:] for cl in cls):
+                    l,r = i,i+j
                     if i and s[i-1] in ket:
                         l -= 1
-                    if i+6-j<len(s) and s[i+6-j]=='l' or s[i+6-j]=='J':
+                    if i+j<len(s) and s[i+j]=='l' or s[i+j]=='J':
                             r += 1
-                    if i+6-j<len(s) and s[i+6-j]=='1':
+                    if i+j<len(s) and s[i+j]=='1':
                         if w[-4:] in ['6ab6','49e0']:
                                 r += 1
                         # if w=='da664f':
                         #     if i+9<len(s) and s[i+6]=='1' and s[i+7]=='1' and : # 1121怎么办？去前还是去后？
 
                         if w[-4:] == 'e96c':
-                            if i+7-j<len(s) and (s[i+7-j]=='8' or s[i+7-j]=='9' or s[i+7-j]=='1'): # 黄色没有110+
+                            if i+j+1<len(s) and (s[i+j+1]=='8' or s[i+j+1]=='9' or s[i+j+1]=='1'): # 黄色没有110+
                                 r += 1
                     s = s[:l]+' '+s[r:]
-
-            w = s[i:i+6].lower()
-            if w in cl:
-                l,r = i,i+6
-                if i and s[i-1] in ket:
-                    l -= 1
-                if i+6<len(s) and s[i+6]=='l' or s[i+6]=='J':
-                        r += 1
-                if i+6<len(s) and s[i+6]=='1':
-                    if w in ['556ab6','c949e0','o949e0']:
+            for i in range(len(s)-j):  # 前j位一样
+                w = s[i:i+j].lower()
+                if sum(w==cl[:j] for cl in cls):
+                    l,r = i,i+j
+                    if i and s[i-1] in ket:
+                        l -= 1
+                    if i+j<len(s) and s[i+j]=='l' or s[i+j]=='J':
                             r += 1
-                    # if w=='da664f':
-                    #     if i+9<len(s) and s[i+6]=='1' and s[i+7]=='1' and : # 1121怎么办？去前还是去后？
+                    if i+j<len(s) and s[i+j]=='1':
+                        if w[1:4] in ['56a','949']:
+                                r += 1
+                        # if w=='da664f':
+                        #     if i+9<len(s) and s[i+6]=='1' and s[i+7]=='1' and : # 1121怎么办？去前还是去后？
 
-                    if w in ['ffe96c','tfe96c']:
-                        if i+7<len(s) and (s[i+7]=='8' or s[i+7]=='9' or s[i+7]=='1'): # 黄色没有110+
-                            r += 1
-
-                s = s[:l]+' '+s[r:]
-            w = s[i:i+5].lower()
-            if w in cl:
-                l,r = i,i+5
-                if i and s[i-1] in ket:
-                    l -= 1
-                if i+5<len(s) and s[i+6]=='l' or s[i+6]=='J':
-                        r += 1
-                if i+5<len(s) and s[i+5]=='1':
-                    if w=='fe96c':
-                        if i+6<len(s) and (s[i+6]=='8' or s[i+6]=='9' or s[i+6]=='1'): # 黄色没有110+
-                            r += 1
-                s = s[:l]+' '+s[r:]
+                        if w[1:4] == 'fe9':
+                            if i+j+1<len(s) and (s[i+j+1]=='8' or s[i+j+1]=='9' or s[i+j+1]=='1'): # 黄色没有110+
+                                r += 1
+                    s = s[:l]+' '+s[r:]
 
         for i in range(len(s)-4):
             if s[i:i+4]=='1000' or s[i:i+4]=='2023' or s[i:i+4]=='2022':
@@ -177,8 +171,8 @@ for id in range(id0,id0+1000):
         #         '@博':'Q博','考虎':'老虎','显景':'显影','浪浸':'浪漫','自天':'白天','自虎':'白虎','-足':'十足','闺蝥':'闺蜜','自槿':'白槿','紧色':'紫色','粉@':'粉色','手耷':'手套','丰播':'主播','宇护':'守护','花柬':'花束','法者':'法老','法茗':'法老',
         #         '垂鬈':'垂髫','茗板':'老板','壬子':'王子','萝|':'萝卜','神赝':'神鹰','-步':'一步','杳花':'杏花','鬼兔':'兔兔'},
         #      3:{'未未来':'未来'}}
-        m = {1:{'：':':','（':'(','）':')','~':' ','|':' ','[':' ',']':' ','「':' ','－':'-'},
-             2:{'萝下':'萝卜','一女':'-女','一男':'-男','型十':'型+','诸能':'储能','翘翔':'翱翔','翅翘':'翅','倒到':'倒','不到':'不倒','游夹':'游侠'},
+        m = {1:{'：':':','（':'(','）':')','~':' ','|':' ','[':' ',']':' ','「':' ','－':'-','囊':'翼','］':' '},
+             2:{'萝下':'萝卜','一女':'-女','一男':'-男','型十':'型+','诸能':'储能','翘翔':'翱翔','翅翘':'翅','倒到':'倒','不到':'不倒','游夹':'游侠','铠电':'铠甲','骑土':'骑士','然擎':'燃擎','小五':'小丑','自镜':'目镜'},
              3:{}}
         for size in range(1,4):
             for i in range(len(s)-size+1):
@@ -250,8 +244,8 @@ for id in range(id0,id0+1000):
                     #         sp = sp[1:]
                     ls = t[-1]
                     t = []
-                    print('dp',ss,w)
-                    print('dp',ss,w,file=ff)
+                    print(f'dp {ss},{w}')
+                    print(f'dp {ss},{w}',file=ff)
                     if ss in double or ss in dd or ss=='气球' and w in [91,39,31,36,41] or ss=='天气球' and w in [81,44] or ss=='头饰' and w==91:
                         continue
                     if ls in dp and dp[ls]==w: # 最后一位有一样的不要了 防止前面有乱七八糟的东西
@@ -287,8 +281,8 @@ for id in range(id0,id0+1000):
                         ss = ss[1:]
                     # ss = ss.replace('^','')
                     t = []
-                    print('tp',ss,w)
-                    print('tp',ss,w,file=ff)
+                    print(f'tp {ss},{w}')
+                    print(f'tp {ss},{w}',file=ff)
                     if ss in dt: # 处理常见识别错误
                         continue
                     if ss in tp and tp[ss]==w: # 重复
