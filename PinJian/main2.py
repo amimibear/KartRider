@@ -50,7 +50,7 @@ ff = open(f'data/data{N}.txt', 'w')
 ocr = PaddleOCR(use_angle_cls=False, lang='ch') # need to run only once to download and load model into memory # ocr_version='PP-OCRv2'
 
 id0 = int(open(f'img/_ok.txt', 'r').read())+1
-id0 = 47101
+# id0 = 47101
 
 # 556ab6 蓝 25~47
 # c949e0 紫 51～80
@@ -68,8 +68,8 @@ for id in range(id0,1000000):
 # for id in range(41600,41601):
     if id>=50627 and id<=52953:
         continue
-    print('\n',id)
-    print('\n',id,file=ff)
+    print(f'\n{id}')
+    print(f'\n{id}',file=ff)
     save = 0 
     result = ocr.ocr(f'img/{id}.png', cls=False)
     result = [line[1][0] for res in result for line in res]
@@ -124,7 +124,7 @@ for id in range(id0,1000000):
                     l,r = i,i+j
                     if i and s[i-1] in ket:
                         l -= 1
-                    if i+j<len(s) and s[i+j]=='l' or s[i+j]=='J':
+                    if i+j<len(s) and (s[i+j]=='l' or s[i+j]=='J'):
                             r += 1
                     if i+j<len(s) and s[i+j]=='1':
                         if w[-4:] in ['6ab6','49e0']:
@@ -142,7 +142,7 @@ for id in range(id0,1000000):
                     l,r = i,i+j
                     if i and s[i-1] in ket:
                         l -= 1
-                    if i+j<len(s) and s[i+j]=='l' or s[i+j]=='J':
+                    if i+j<len(s) and (s[i+j]=='l' or s[i+j]=='J'):
                             r += 1
                     if i+j<len(s) and s[i+j]=='1':
                         if w[1:4] in ['56a','949']:
@@ -176,7 +176,7 @@ for id in range(id0,1000000):
         #         '垂鬈':'垂髫','茗板':'老板','壬子':'王子','萝|':'萝卜','神赝':'神鹰','-步':'一步','杳花':'杏花','鬼兔':'兔兔'},
         #      3:{'未未来':'未来'}}
         m = {1:{'：':':','（':'(','）':')','~':' ','|':' ','[':' ',']':' ','「':' ','－':'-','囊':'翼','］':' ','」':' ','丨':' '},
-             2:{'萝下':'萝卜','一女':'-女','一男':'-男','型十':'型+','诸能':'储能','翘翔':'翱翔','翅翘':'翅','倒到':'倒','不到':'不倒','游夹':'游侠','铠电':'铠甲','骑土':'骑士','然擎':'燃擎','小五':'小丑','自镜':'目镜','钢电':'钢甲','魅景':'魅影'},
+             2:{'萝下':'萝卜','一女':'-女','一男':'-男','型十':'型+','诸能':'储能','翘翔':'翱翔','翅翘':'翅','倒到':'倒','不到':'不倒','游夹':'游侠','铠电':'铠甲','骑土':'骑士','然擎':'燃擎','小五':'小丑','自镜':'目镜','钢电':'钢甲','魅景':'魅影','机电':'机甲','友型':'发型'},
              3:{}}
         for size in range(1,4):
             for i in range(len(s)-size+1):
@@ -239,6 +239,8 @@ for id in range(id0,1000000):
                     ss = ''.join(t)
                     # ss = ss.replace('^','','|','_')
                     sp = '+'.join(t)
+                    if ss and ss[0]=='l':
+                        ss = ss[1:]
 
                     # if sp and sp[0]=='套':
                     #     sp = sp[1:]
