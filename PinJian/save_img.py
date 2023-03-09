@@ -9,7 +9,7 @@ for id in range(id0,id0+1300000):
     # im = ImageGrab.grab(bbox=(-1240, 150, -700, 755))  # X1,Y1,X2,Y2 iphone
     im = ImageGrab.grab(bbox=(-1200, 30, -610, 870))  # X1,Y1,X2,Y2 ipad
     # im = ImageGrab.grab(bbox=(270, 30, 880, 870))  # X1,Y1,X2,Y2 ipad
-    time.sleep(5)
+    time.sleep(3)
     im.save(f"img/{id}.png")
     open('img/_.txt', 'w').write(str(id))
 
