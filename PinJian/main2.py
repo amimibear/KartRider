@@ -279,6 +279,8 @@ for id in range(id0,id0+1000):
                         ss = ss[1:]
                     if ss and ss[0]=='-':
                         ss = ss[1:]
+                    if ss and ss[0]=='+':
+                        ss = ss[1:]
                     # ss = ss.replace('^','')
                     t = []
                     print(f'tp {ss},{w}')
