@@ -9,7 +9,8 @@ from paddleocr import PaddleOCR
 
 # 27 到 47100
 # 28 到 30733
-
+# 40 到 67597
+# 41 30733 开始
 # time.sleep(10)
 
 # im = ImageGrab.grab()  # X1,Y1,X2,Y2
@@ -271,7 +272,7 @@ for id in range(id0,1000000):
                     #     print(id,'too short ',w,' ! ',s)
                     w = int(w)
                     ss = '+'.join(t)
-                    while ss and ss[0] in ['-','l','品','+']:
+                    while ss and ss[0] in ['-','l','+']:
                         ss = ss[1:]
                     while ss and ss[-1] in ['开','+']:
                         ss = ss[:-1]
