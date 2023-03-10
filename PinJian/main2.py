@@ -225,6 +225,8 @@ for id in range(id0,1000000):
                     ss = ''.join(t)
                     # ss = ss.replace('^','','|','_')
                     sp = '+'.join(t)
+                    if ss and ss[0]=='-':
+                        ss = ss[1:]
                     if ss and ss[0]=='l':
                         ss = ss[1:]
                     if ss and ss[-1]=='开':
