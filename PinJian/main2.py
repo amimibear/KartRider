@@ -225,9 +225,7 @@ for id in range(id0,1000000):
                     ss = ''.join(t)
                     # ss = ss.replace('^','','|','_')
                     sp = '+'.join(t)
-                    if ss and ss[0]=='-':
-                        ss = ss[1:]
-                    if ss and ss[0]=='l':
+                    while ss and ss[0] in ['-','l','品']:
                         ss = ss[1:]
                     if ss and ss[-1]=='开':
                         ss = ss[:-1]
@@ -273,15 +271,9 @@ for id in range(id0,1000000):
                     #     print(id,'too short ',w,' ! ',s)
                     w = int(w)
                     ss = '+'.join(t)
-                    if ss and ss[0]=='l':
+                    while ss and ss[0] in ['-','l','品','+']:
                         ss = ss[1:]
-                    if ss and ss[0]=='-':
-                        ss = ss[1:]
-                    if ss and ss[0]=='+':
-                        ss = ss[1:]
-                    if ss and ss[-1]=='开':
-                        ss = ss[:-1]
-                    if ss and ss[-1]=='+':
+                    while ss and ss[-1] in ['开','+']:
                         ss = ss[:-1]
                     # ss = ss.replace('^','')
                     t = []
