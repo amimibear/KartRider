@@ -1,8 +1,8 @@
 # 藏珍馆 单品/套品品鉴
 by 啊咪咪小熊  
 原理：手机投屏到电脑，电脑实时对世界频道截图，然后用EasyOCR读取文字信息并处理。  
-图集见[【品鉴图集】（By 酥诺 & 淦饭）](https://docs.qq.com/sheet/DZldVdXNmZHR2TXpC)  
-欢迎大家在选单品时拉到最底部把已鉴定单品截图，共享到[品鉴截图在线收集，谢谢大家](https://docs.qq.com/sheet/DR1JkTHF1RlNzUEFj)里，数据会被统计进来。
+图集见[【品鉴图集】（By 酥诺）](https://docs.qq.com/sheet/DZldVdXNmZHR2TXpC)  
+欢迎大家在选单品时拉到最底部把已鉴定单品截图，共享到[每日品鉴或运势截图   收集！！](https://docs.qq.com/sheet/DR1JkTHF1RlNzUEFj)里，数据会被统计进来。
 
 ## 套品
 套品数据来自世界频道  
