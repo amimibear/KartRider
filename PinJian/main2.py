@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image
 # import easyocr
 from itertools import groupby
 import re
@@ -12,6 +13,7 @@ from paddleocr import PaddleOCR
 # 40 到 67597
 # 41 30733 开始
 # time.sleep(10)
+# 77 开始几乎不留图 但要注意data里重复的!!!
 
 # im = ImageGrab.grab()  # X1,Y1,X2,Y2
 # for i in range(10):
@@ -30,17 +32,21 @@ N = 1
 while os.path.exists(f'data/data{N}.txt'):
     N += 1
 
-# # 每次读最新的，没有筛选也没关系，之后通过delete.py直接筛掉
-# reader = csv.reader(open("danpin.csv"))
-# for row in reader:
-#     if row[0] in dp:
-#         print('wait!!!!!!!!!!!')
-#     dp[row[0]]=int(row[1])
+# 每次读最新的，没有筛选也没关系，之后通过delete.py直接筛掉
+reader = csv.reader(open("danpin.csv"))
+for row in reader:
+    if row[0] in dp:
+        print('wait!!!!!!!!!!!')
+    dp[row[0]]=int(row[1])
 
-# reader = csv.reader(open("taopin.csv"))
-# for row in reader:
-#     tp[row[0]]=int(row[1])
+reader = csv.reader(open("taopin.csv"))
+for row in reader:
+    tp[row[0]]=int(row[1])
 
+dlt = {}
+reader = csv.reader(open("delete.csv"))
+for row in reader:
+    dlt[row[0]]=int(row[1])
 
 # del_img = []
 
@@ -67,12 +73,33 @@ cls = ['556ab6','556a66'
 # for id in range(id0,id0+1000):
 for id in range(id0,1000000):
 # for id in range(41600,41601):
-    if id>=50627 and id<=52953:
+    if id<=274938:
         continue
+    if id>=277969 and id<=281050:
+        continue
+    # if id >= 221724:
+    #     break
     print(f'\n{id}')
     print(f'\n{id}',file=ff)
-    save = 0 
-    result = ocr.ocr(f'img/{id}.png', cls=False)
+    save = 0
+    
+
+    # result = ocr.ocr(f'img/{id}.png', cls=False)
+    if not os.path.exists(f'img/{id}.png'):
+        with open(f'img/_.txt', 'r') as fr:
+            id1 = int(fr.read())
+        if id>id1-3: # 到前沿了
+            while not os.path.exists('img/{id}.png'):
+                time.sleep(1)
+    try:
+        image = Image.open(f'img/{id}.png')
+        crop_area = (400, 0, 1250, 950) # 定义裁剪区域 (x1, y1, x2, y2)
+        result = ocr.ocr(np.array(image.crop(crop_area).convert('RGB')), cls=False)
+    except:
+        if os.path.exists(f'img/{id}.png'):
+            os.remove(f"img/{id}.png")
+        continue
+    
     result = [line[1][0] for res in result for line in res]
 
     o = 0
@@ -104,14 +131,14 @@ for id in range(id0,1000000):
 
         # d = {'I':'1','g':'9','G':'6','O':'0'}
         # for i in range(len(s)):
-        #     if s[i] in d and (s[i-1].isdigit() or s[i-1] in d or i+1<len(s) and (s[i+1].isdigit() or s[i+1] in d)):
+        #     if s[i] in d and (s[i-1].isdecimal() or s[i-1] in d or i+1<len(s) and (s[i+1].isdecimal() or s[i+1] in d)):
         #         s = s[:i]+d[s[i]]+s[i+1:]
         # for i in range(len(s)):
         #     if s[i]=='0' and s[i-2:i]=='Pr':
         #         s = s[:i]+'o'+s[i+1:]
 
         # for i in range(1,len(s)-1):
-        #     if s[i]=='0' and not s[i-1].isdigit() and not s[i+1].isdigit():
+        #     if s[i]=='0' and not s[i-1].isdecimal() and not s[i+1].isdecimal():
         #         s = s[:i]+('O' if s[i+1].isupper() else 'o')+s[i+1:]
 
         # 处理颜色代码bug
@@ -187,8 +214,8 @@ for id in range(id0,1000000):
         print('s1',s,file=ff)
         # ff.write(str(id)+' '+s+'\n')
 
-        # l = [w for w in sum([re.split("[:+/. ]", ''.join(j)) for i,j in groupby(re.sub(u'\\[.*?\\]','',s), key=lambda x: x.isdigit())],[]) if w]
-        l = [w for w in sum([re.split("[';:+/., ]|`", ''.join(j)) for i,j in groupby(s, key=lambda x: x.isdigit() or x=='S')],[]) if w]
+        # l = [w for w in sum([re.split("[:+/. ]", ''.join(j)) for i,j in groupby(re.sub(u'\\[.*?\\]','',s), key=lambda x: x.isdecimal())],[]) if w]
+        l = [w for w in sum([re.split("[';:+/., ]|`", ''.join(j)) for i,j in groupby(s, key=lambda x: x.isdecimal() or x=='S')],[]) if w]
         print('l',l)
         print('l',l,file=ff)
         o = 0 # 1 单品 2 套品
@@ -214,7 +241,7 @@ for id in range(id0,1000000):
                 o = 2
                 w = w[3:]
             if o==1: # 单品
-                if w.isdigit():
+                if w.isdecimal():
                     if not t: # 防止 t[-1] 报错
                         ff.write(f'\n??? {w} {id} {s}\n')
                         continue
@@ -241,6 +268,8 @@ for id in range(id0,1000000):
                     t = []
                     print(f'dp {ss},{w}')
                     print(f'dp {ss},{w}',file=ff)
+                    if ss in dlt and w==dlt[ss]: # delete
+                        continue
                     if ss in double and w in double[ss]: # 两个值的
                         continue
                     if ss=='气球' and w in [91,39,31,36,41] or ss=='天气球' and w in [81,44] or ss=='头饰' and w==91:
@@ -262,7 +291,7 @@ for id in range(id0,1000000):
                 else:
                     t.append(w)
             elif o==2: # 套品
-                if w.isdigit():
+                if w.isdecimal():
                     if not t: # 防止 t[-1] 报错
                         ff.write(f'\n??? {w} {id} {s}\n')
                         continue
@@ -280,6 +309,8 @@ for id in range(id0,1000000):
                     t = []
                     print(f'tp {ss},{w}')
                     print(f'tp {ss},{w}',file=ff)
+                    if ss in dlt and w==dlt[ss]: # delete
+                        continue
                     if ss in tp and tp[ss]==w: # 重复
                         continue
                     if ss in tp and tp[ss]!=w: # 处理同物品不同value
