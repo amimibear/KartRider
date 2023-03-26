@@ -26,7 +26,8 @@ from paddleocr import PaddleOCR
 # exit()
 
 dp, tp = {}, {}
-double = {'多彩气球炫光':[44,45],'汽车之家气球':[39,42],'黑妞生日气球':[36,43],'跑跑新生服饰':[27,34],'跑跑新生发型':[26,27],'礼花气球':[44,53],'章鱼气球':[37,47]} # 这些东西竟然有两个品鉴值
+double = {'多彩气球炫光':[44,45],'汽车之家气球':[39,42],'黑妞生日气球':[36,43],'跑跑新生服饰':[27,34],'跑跑新生发型':[26,27],
+          '礼花气球':[44,53],'章鱼气球':[37,47],'经典校服':[28,34],'南瓜假面':[39,59],'正义牛仔帽(男)':[37,39]} # 这些东西竟然有两个品鉴值
 
 N = 1
 while os.path.exists(f'data/data{N}.txt'):
@@ -282,7 +283,8 @@ for id in range(id0,1000000):
                         continue
                     if ss in dp and dp[ss]!=w: # 处理同物品不同value
                         if not (w<20 or w>200 or w%100==dp[ss]): # 可能前面多个1
-                            ff.write(f'\n!!! {id} {ss} {w} {s}\n\n')
+                            ff.write(f'\n!!! {id} {ss} {w} {dp[ss]} \n {s}\n\n')
+                            save = 1
                         continue
                     dp[ss] = w
                     print('add!')
@@ -315,7 +317,8 @@ for id in range(id0,1000000):
                         continue
                     if ss in tp and tp[ss]!=w: # 处理同物品不同value
                         if not (w<20 or w>200 or w%100==tp[ss]): # 可能前面多个1
-                            ff.write(f'\n!!! {id} {ss} {w} {s}\n\n')
+                            ff.write(f'\n!!! {id} {ss} {w} {tp[ss] }\n {s}\n\n')
+                            save = 1
                         continue
                     tp[ss] = w
                     print('add!')
