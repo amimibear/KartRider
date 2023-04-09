@@ -72,7 +72,7 @@ cls = ['556ab6','556a66'
 
 # reader = easyocr.Reader(['ch_sim','en']) 
 # for id in range(id0,id0+1000):
-for id in range(id0,1000000):
+for id in range(id0,2000000):
 # for id in range(41600,41601):
     if id<=274938:
         continue
@@ -83,21 +83,25 @@ for id in range(id0,1000000):
     print(f'\n{id}')
     print(f'\n{id}',file=ff)
     save = 0
-    
+    with open(f'img/_.txt', 'r') as fr:
+        id1 = int(fr.read())
 
     # result = ocr.ocr(f'img/{id}.png', cls=False)
     if not os.path.exists(f'img/{id}.png'):
-        with open(f'img/_.txt', 'r') as fr:
-            id1 = int(fr.read())
         if id>id1-3: # 到前沿了
-            while not os.path.exists('img/{id}.png'):
+            while not os.path.exists(f'img/{id}.png'):
+                print('wait')
                 time.sleep(1)
     try:
+        if id>id1-3:
+            time.sleep(2) # 前沿不能太快，可能有文件但是没存好
         image = Image.open(f'img/{id}.png')
         crop_area = (400, 0, 1250, 950) # 定义裁剪区域 (x1, y1, x2, y2)
         result = ocr.ocr(np.array(image.crop(crop_area).convert('RGB')), cls=False)
     except:
+        print('fail!')
         if os.path.exists(f'img/{id}.png'):
+            print('remove')
             os.remove(f"img/{id}.png")
         continue
     
