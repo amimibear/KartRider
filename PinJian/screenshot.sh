@@ -31,5 +31,5 @@ while true; do
   echo $next_number > "$number_file"
   echo $next_number
 
-  sleep 1
+  sleep 2
 done
