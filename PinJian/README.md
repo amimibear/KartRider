@@ -4,7 +4,7 @@ by 啊咪咪小熊
 图集见[【品鉴图集】（By 酥诺）](https://docs.qq.com/sheet/DZldVdXNmZHR2TXpC)  
 欢迎大家在选单品时拉到最底部把已鉴定单品截图，共享到[品鉴运势截图 远程收集](https://docs.qq.com/sheet/DR1JkTHF1RlNzUEFj)里，数据会被统计进来。
 
-## 冰雪之歌套品(夜行骑士在后面)
+## 冰雪之歌套品
 套品数据来自世界频道  
 
 taopin0.csv: (186个)
