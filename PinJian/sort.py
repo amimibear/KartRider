@@ -4,8 +4,8 @@ import csv
 
 
 dp, tp = {}, {}
-
-reader = csv.reader(open("danpin.csv"))
+n = 1
+reader = csv.reader(open(f"danpin{n}.csv"))
 for row in reader:
     if row[0] in dp:
         print('重复!',row)
@@ -30,7 +30,7 @@ for i in dp:
 # 绿蘑菇气球 蘑菇气球
 # 星彩虹手套气球 彩虹手套气球
 
-writer = csv.writer(open("danpin.csv", "w"))
+writer = csv.writer(open(f"danpin{n}.csv", "w"))
 writer.writerows(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])))
 # writer.writerows([(i,j[0],j[1]) for i,j in enumerate(sorted(list(dp.items()),key=lambda x:(-x[1],x[0])),1)])
 
