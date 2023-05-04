@@ -280,8 +280,8 @@ for id in range(id0,2000000):
                         #         sp = sp[1:]
                         ls = t[-1]
                         t = []
-                        print(f'dp {ss},{w}')
-                        print(f'dp {ss},{w}',file=ff)
+                        print(f'dp{n} {ss},{w}')
+                        print(f'dp{n} {ss},{w}',file=ff)
                         if ss in dlt and w==dlt[ss]: # delete
                             continue
                         if ss in double and w in double[ss]: # 两个值的
@@ -322,8 +322,8 @@ for id in range(id0,2000000):
                             ss = ss[:-1]
                         # ss = ss.replace('^','')
                         t = []
-                        print(f'tp {ss},{w}')
-                        print(f'tp {ss},{w}',file=ff)
+                        print(f'tp{n} {ss},{w}')
+                        print(f'tp{n} {ss},{w}',file=ff)
                         if ss in dlt and w==dlt[ss]: # delete
                             continue
                         if ss in tp[n] and tp[n][ss]==w: # 重复
