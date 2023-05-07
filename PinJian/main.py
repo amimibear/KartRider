@@ -204,7 +204,7 @@ for id in range(id0,2000000):
             
             m = {1:{'：':':','（':'(','）':')','~':' ','|':' ','[':' ',']':' ','「':' ','－':'-','囊':'翼','［':' ','］':' ','」':' ','丨':' ','【':' ','】':' ','＋':'+','！':' '},
                 2:{'萝下':'萝卜','一女':'-女','一男':'-男','型十':'型+','诸能':'储能','翘翔':'翱翔','翅翘':'翅','倒到':'倒','不到':'不倒','游夹':'游侠','铠电':'铠甲','骑土':'骑士','然擎':'燃擎','小五':'小丑','自镜':'目镜','钢电':'钢甲','魅景':'魅影','机电':'机甲','友型':'发型','萌免':'萌兔','手权':'手杖',
-                    '翘膀':'翅膀','驾鸯':'鸳鸯','贺罗':'贺岁','战土':'战士','金生':'金牛','车团':'军团','育包':'背包','揭蛋':'捣蛋','友饰':'发饰','末来':'未来','胖敦':'胖墩','头盗':'头盔','定球':'足球'},
+                    '翘膀':'翅膀','驾鸯':'鸳鸯','贺罗':'贺岁','战土':'战士','金生':'金牛','车团':'军团','育包':'背包','揭蛋':'捣蛋','友饰':'发饰','末来':'未来','胖敦':'胖墩','头盗':'头盔','定球':'足球','白勺':'的'},
                 3:{}}
             for size in range(1,4):
                 for i in range(len(s)-size+1):
@@ -348,10 +348,19 @@ for id in range(id0,2000000):
 
     # print(dp,'\n',tp,'\n')
 
-    for n in range(2):
-        writer = csv.writer(open(f"danpin{n}.{N}.0.csv", "w"))
-        writer.writerows(sorted(list(dp[n].items()),key=lambda x:(-x[1],x[0])))
 
-        writer = csv.writer(open(f"taopin{n}.{N}.0.csv", "w"))
-        writer.writerows(sorted(list(tp[n].items()),key=lambda x:(-x[1],x[0])))
+    def write_csv(filename, data):
+        temp_filename = f"{filename}.tmp"
+        with open(temp_filename, "w", newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerows(data)
+
+        os.replace(temp_filename, filename)
+
+    for n in range(2):
+        danpin_data = sorted(list(dp[n].items()), key=lambda x: (-x[1], x[0]))
+        write_csv(f"danpin{n}.{N}.0.csv", danpin_data)
+
+        taopin_data = sorted(list(tp[n].items()), key=lambda x: (-x[1], x[0]))
+        write_csv(f"taopin{n}.{N}.0.csv", taopin_data)
 
