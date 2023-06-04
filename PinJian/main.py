@@ -74,7 +74,7 @@ cls = ['556ab6','556a66'
 
 # reader = easyocr.Reader(['ch_sim','en']) 
 # for id in range(id0,id0+1000):
-for id in range(id0,2000000):
+for id in range(id0,5000000):
 # for id in range(41600,41601):
     if id<=274938:
         continue
@@ -218,7 +218,7 @@ for id in range(id0,2000000):
             #         elif s[i-3]=='5':
             #             s = s[:i-3]+' S'+s[i-2:]
             i = 0
-            while i<len(s): 
+            while i<len(s):
                 if s[i]=='S': # 分割 S**车王/神炫光
                     s = s[:i]+' '+s[i:]
                     i += 1
