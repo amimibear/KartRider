@@ -229,7 +229,7 @@ for id in range(id0,5000000):
             # ff.write(str(id)+' '+s+'\n')
 
             # l = [w for w in sum([re.split("[:+/. ]", ''.join(j)) for i,j in groupby(re.sub(u'\\[.*?\\]','',s), key=lambda x: x.isdecimal())],[]) if w]
-            l = [w for w in sum([re.split("[';:+/., ]|`", ''.join(j)) for i,j in groupby(s, key=lambda x: x.isdecimal() or x=='S')],[]) if w]
+            l = [w for w in sum([re.split("[';:+/·., ]|`", ''.join(j)) for i,j in groupby(s, key=lambda x: x.isdecimal() or x=='S')],[]) if w]
             print('l',l)
             print('l',l,file=ff)
             o = 0 # 1 单品 2 套品

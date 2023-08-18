@@ -17,7 +17,7 @@ while true; do
   # adb exec-out screencap -p > "$destination_folder/$current_number.png"
   
   # 家wifi
-  # adb -s 192.168.1.22:5555 exec-out screencap -p > "$destination_folder/$current_number.png"
+  # adb -s 192.168.0.103:5555 exec-out screencap -p > "$destination_folder/$current_number.png"
   
   # 图书馆wifi
   # adb -s 192.168.1.5:5555 exec-out screencap -p > "$destination_folder/$current_number.png"
