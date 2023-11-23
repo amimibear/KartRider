@@ -7,6 +7,8 @@ import csv
 import time
 import os
 from paddleocr import PaddleOCR
+import paddleocr
+print(paddleocr.__version__)
 
 # 27 到 47100
 # 28 到 30733
@@ -57,7 +59,11 @@ for row in reader:
 ff = open(f'data/data{N}.txt', 'w')
 # ff = open(f'data0.txt', 'w')
 
-ocr = PaddleOCR(use_angle_cls=False, lang='ch') # need to run only once to download and load model into memory # ocr_version='PP-OCRv2'
+# ocr = PaddleOCR(use_angle_cls=False, lang='ch') # need to run only once to download and load model into memory # ocr_version='PP-OCRv2'
+# 221
+ocr = PaddleOCR(rec_model_dir='ch_PP-OCRv4_rec_server_infer')
+# 222
+# ocr = PaddleOCR(rec_model_dir='ch_PP-OCRv4_rec_server_infer', det_model_dir='ch_PP-OCRv4_det_server_infer') # need to run only once to download and load model into memory # ocr_version='PP-OCRv2'
 
 id0 = int(open(f'img/_ok.txt', 'r').read())+1
 # id0 = 47101
@@ -74,19 +80,16 @@ cls = ['556ab6','556a66'
 
 # reader = easyocr.Reader(['ch_sim','en']) 
 # for id in range(id0,id0+1000):
-for id in range(id0,5000000):
-# for id in range(41600,41601):
-    if id<=274938:
-        continue
-    if id>=277969 and id<=281050:
-        continue
-    # if id >= 221724:
-    #     break
+for id in range(id0,10000000):
+# for id in range(4622409,4622420):
     print(f'\n{id}')
     print(f'\n{id}',file=ff)
     save = 0
     with open(f'img/_.txt', 'r') as fr:
-        id1 = int(fr.read())
+        try:
+            id1 = int(fr.read())
+        except:
+            pass
 
     # result = ocr.ocr(f'img/{id}.png', cls=False)
     if not os.path.exists(f'img/{id}.png'):
@@ -98,8 +101,15 @@ for id in range(id0,5000000):
         if id>id1-3:
             time.sleep(2) # 前沿不能太快，可能有文件但是没存好
         image = Image.open(f'img/{id}.png')
-        crop_area = (400, 0, 1250, 950) # 定义裁剪区域 (x1, y1, x2, y2)
-        result = ocr.ocr(np.array(image.crop(crop_area).convert('RGB')), cls=False)
+        if image.size != (850,950):
+            crop_area = (400, 0, 1250, 950) # 定义裁剪区域 (x1, y1, x2, y2)
+            image = image.crop(crop_area)
+        RGB = np.array(image.convert('RGB'))
+        os.remove(f"img/{id}.png") # 如果有新增，最后再保存回去
+        if not np.any(np.all(RGB == [237, 163, 163], axis=-1)):
+            continue
+        result = ocr.ocr(RGB, cls=False)
+        
     except:
         print('fail!')
         if os.path.exists(f'img/{id}.png'):
@@ -204,7 +214,8 @@ for id in range(id0,5000000):
             
             m = {1:{'：':':','（':'(','）':')','~':' ','|':' ','[':' ',']':' ','「':' ','－':'-','囊':'翼','［':' ','］':' ','」':' ','丨':' ','【':' ','】':' ','＋':'+','！':' '},
                 2:{'萝下':'萝卜','一女':'-女','一男':'-男','型十':'型+','诸能':'储能','翘翔':'翱翔','翅翘':'翅','倒到':'倒','不到':'不倒','游夹':'游侠','铠电':'铠甲','骑土':'骑士','然擎':'燃擎','小五':'小丑','自镜':'目镜','钢电':'钢甲','魅景':'魅影','机电':'机甲','友型':'发型','萌免':'萌兔','手权':'手杖',
-                    '翘膀':'翅膀','驾鸯':'鸳鸯','贺罗':'贺岁','战土':'战士','金生':'金牛','车团':'军团','育包':'背包','揭蛋':'捣蛋','友饰':'发饰','末来':'未来','胖敦':'胖墩','头盗':'头盔','定球':'足球','白勺':'的'},
+                    '翘膀':'翅膀','驾鸯':'鸳鸯','贺罗':'贺岁','战土':'战士','金生':'金牛','车团':'军团','育包':'背包','揭蛋':'捣蛋','友饰':'发饰','末来':'未来','胖敦':'胖墩','头盗':'头盔','定球':'足球','白勺':'的',
+                    '手特':'手持','剪者':'勇者','龟电':'龟甲','统师':'统帅'},
                 3:{}}
             for size in range(1,4):
                 for i in range(len(s)-size+1):
@@ -339,8 +350,8 @@ for id in range(id0,5000000):
                         save = 1        
                     else:
                         t.append(w)
-    if not save:
-        os.remove(f"img/{id}.png")
+    if save:
+        image.save(f'img/{id}.png')
         # with open('del_img.txt', 'a') as f:
         #     f.seek(0,2)
         #     f.write(str(i)+'\n')
