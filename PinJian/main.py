@@ -27,15 +27,16 @@ print(paddleocr.__version__)
 # exit()
 
 dp, tp = [{},{}], [{},{}]
+# 这些东西竟然有两个品鉴值
 double = [{'多彩气球炫光':[44,45],'汽车之家气球':[39,42],'黑妞生日气球':[36,43],'跑跑新生服饰':[27,34],'跑跑新生发型':[26,27],
           '礼花气球':[44,53],'章鱼气球':[37,47],'经典校服':[28,34],'南瓜假面':[39,59],'正义牛仔帽(男)':[37,39],'仙人掌气球':[43,51],'正义牛仔帽(女)':[36,37]},
           {'礼花气球':[38,52],'仙人掌气球':[39,50],'章鱼气球':[35,50],'多彩气球炫光':[45,47],'黑妞生日气球':[34,40],'小丑气球':[36,39],
           '汽车之家气球':[32,37],'南瓜假面':[35,84],'跑跑新生服饰':[21,22],'跑跑新生发型':[15,16]}]
-# 这些东西竟然有两个品鉴值
 
-
-
-dlt = {}
+# 特殊情况映射
+special = {'FormulaE气球':'Formula E 气球','黑杰克**喷漆':'黑杰克处女喷漆'}
+# 暂不用dlt
+# dlt = {}
 
 N = 1
 while os.path.exists(f'data/data{N}.txt'):
@@ -59,9 +60,10 @@ for n in range(2):
                 tp[n][row[0]]=int(row[1])
             break
 
-reader = csv.reader(open("delete.csv"))
-for row in reader:
-    dlt[row[0]]=int(row[1])
+# 暂不用delete
+# reader = csv.reader(open("delete.csv"))
+# for row in reader:
+#     dlt[row[0]]=int(row[1])
 
 # del_img = []
 
@@ -104,11 +106,11 @@ f = [lambda x:ocr1.ocr(x, cls=False),
      lambda x:ocr3.ocr(x, cls=False),
      lambda x:ocr3.ocr(x[:-1], cls=False)]
 
-test = 0
+test = 1
 
 if test:
     id0 -= 100000
-    id0 = 4661046
+    id0 = 4716253
 for id in range(id0,10000000):
 # for id in range(4671788,4671789):
     # print(f'\n{id}')
@@ -159,7 +161,8 @@ for id in range(id0,10000000):
         valid_blocks = [block for block in blocks if np.any(block[:, -1, 2]==163)]
         return valid_blocks
     
-    save = 0
+    add = 0
+    byy = 0 #是否有不一样的
     
     for k in range(6):
         print('ocr ',k)
@@ -235,7 +238,7 @@ for id in range(id0,10000000):
                     2:{'萝下':'萝卜','一女':'-女','一男':'-男','型十':'型+','诸能':'储能','翘翔':'翱翔','翅翘':'翅','倒到':'倒','不到':'不倒','游夹':'游侠','铠电':'铠甲','骑土':'骑士','然擎':'燃擎','小五':'小丑','自镜':'目镜','钢电':'钢甲','魅景':'魅影','机电':'机甲','友型':'发型','萌免':'萌兔','手权':'手杖',
                         '翘膀':'翅膀','驾鸯':'鸳鸯','贺罗':'贺岁','战土':'战士','金生':'金牛','车团':'军团','育包':'背包','揭蛋':'捣蛋','友饰':'发饰','末来':'未来','胖敦':'胖墩','头盗':'头盔','定球':'足球','白勺':'的',
                         '手特':'手持','剪者':'勇者','龟电':'龟甲','统师':'统帅','愧木':'傀木','酉长':'酋长','飘虫':'瓢虫','撩牙':'獠牙',
-                        '库呀':'库伢','库牙':'库伢','库讶':'库伢','吃语':'呓语','烊烊':'咩咩咩'},
+                        '库呀':'库伢','库牙':'库伢','库讶':'库伢','吃语':'呓语','烊烊':'咩咩咩','垂髻':'垂髫'},
                     3:{'迷夜翼':'迷璘夜翼','烊烊烊':'咩咩咩'}}
                 for size in range(3,0,-1):
                     for i in range(len(s)-size+1):
@@ -260,7 +263,7 @@ for id in range(id0,10000000):
                 # ff.write(str(id)+' '+s+'\n')
 
                 # l = [w for w in sum([re.split("[:+/. ]", ''.join(j)) for i,j in groupby(re.sub(u'\\[.*?\\]','',s), key=lambda x: x.isdecimal())],[]) if w]
-                l = [w for w in sum([re.split("[';:/·., ]|`", ''.join(j)) for i,j in groupby(s, key=lambda x: x.isdecimal() or x=='S')],[]) if w]
+                l = [w for w in sum([re.split("[';:/·, ]|`", ''.join(j)) for i,j in groupby(s, key=lambda x: x.isdecimal() or x=='S')],[]) if w]
                 print('l',l)
                 print('l',l,file=ff)
                 o = 0 # 1 单品 2 套品
@@ -335,6 +338,8 @@ for id in range(id0,10000000):
                             
                             print(f'dp{n} {ss},{w}')
                             print(f'dp{n} {ss},{w}',file=ff)
+                            if ss in special:
+                                ss = special[ss]
                             # if ss in dlt and w==dlt[ss] and not test: # delete
                             #     continue
                             if ss in double[n] and w in double[n][ss]: # 两个值的
@@ -349,19 +354,20 @@ for id in range(id0,10000000):
                                 continue
                             if ss in dp[n] and dp[n][ss]!=w: # 处理同物品不同value
                                 if not (w<20 or w>200 or w%100==dp[n][ss]): # 可能前面多个1
-                                    print(f'\n!!! {id} {ss} {w} {dp[n][ss]} \n {s}\n\n')
-                                    ff.write(f'\n!!! {id} {ss} {w} {dp[n][ss]} \n {s}\n\n')
-                                    save = 1
+                                    print(f'\nbyy!!! {ss} old:{dp[n][ss]} new:{w} 留old\n')
+                                    ff.write(f'\nbyy!!! {ss} old:{dp[n][ss]} new:{w} 留old\n')
+                                    byy = 1
                                 continue
                             print('add?')
                             print('add?',file=ff)
                             if k==len(f)-1:
                                 dp[n][ss] = w
+                                add = 1
+                                print('add!')
+                                print('add!',file=ff)
                             else:
                                 brk = 1
                                 break
-                            
-                            save = 1
                         else:
                             t.append(w)
                     elif o==2: # 套品
@@ -400,23 +406,21 @@ for id in range(id0,10000000):
                                 continue
                             if ss in tp[n] and tp[n][ss]!=w: # 处理同物品不同value
                                 if not (w<20 or w>200 or w%100==tp[n][ss]): # 可能前面多个1
-                                    print(f'\n!!! {id} {ss} {w} {tp[n][ss] }\n {s}\n\n')
-                                    ff.write(f'\n!!! {id} {ss} {w} {tp[n][ss] }\n {s}\n\n')
-                                    save = 1 # 可以考虑save和brk合并
+                                    print(f'\nbyy!!! {ss} old:{tp[n][ss]} new:{w} 留old\n')
+                                    ff.write(f'\nbyy!!! {ss} old:{tp[n][ss]} new:{w} 留old\n')
+                                    byy = 1 # 可以考虑save和brk合并
                                 continue
                             print('add?')
                             print('add?',file=ff)
                             if k==len(f)-1:
                                 tp[n][ss] = w
+                                add = 1
+                                print('add!')
+                                print('add!',file=ff)
                             else:
                                 brk = 1
                                 break
-                            
-                            save = 1        
                         else:
-                            # if t and t[-1] and t[-1][-1].isdecimal(): # 前面是数字要往上加
-                            #     t[-1] = t[-1]+w
-                            # else:
                             t.append(w)
                 if brk:
                     break
@@ -425,16 +429,18 @@ for id in range(id0,10000000):
         # if brk:
         #     image.save(f'img/{id}.png') # 调试 用test
         #     print('brk')
-        if save: 
-            image.save(f'img/{id}.png')
-            print('add!')
-            print('add!',file=ff)
-            # image.save(f'img/{id}.png')
-        elif not brk: # 如果这个ocr函数break，就让下一个orc函数再试试
+        if not brk: # 如果这个ocr函数break，就让下一个orc函数再试试
             break
             # with open('del_img.txt', 'a') as f:
             #     f.seek(0,2)
             #     f.write(str(i)+'\n')
+    if add or byy: 
+        image.save(f'img/{id}.png')
+        if not add:
+            print('no add!')
+            print('no add!',file=ff)
+        print('save!')
+        print('save!',file=ff)
     if not test:
         open('img/_ok.txt', 'w').write(str(id))
 
