@@ -335,8 +335,8 @@ for id in range(id0,10000000):
                             
                             print(f'dp{n} {ss},{w}')
                             print(f'dp{n} {ss},{w}',file=ff)
-                            if ss in dlt and w==dlt[ss] and not test: # delete
-                                continue
+                            # if ss in dlt and w==dlt[ss] and not test: # delete
+                            #     continue
                             if ss in double[n] and w in double[n][ss]: # 两个值的
                                 continue
                             if ss=='气球' and w in [91,39,31,36,41] or ss=='天气球' and w in [81,44] or ss=='头饰' and w==91:
@@ -394,8 +394,8 @@ for id in range(id0,10000000):
                             
                             print(f'tp{n} {ss},{w}')
                             print(f'tp{n} {ss},{w}',file=ff)
-                            if ss in dlt and w==dlt[ss] and not test: # delete
-                                continue
+                            # if ss in dlt and w==dlt[ss] and not test: # delete
+                            #     continue
                             if ss in tp[n] and tp[n][ss]==w: # 重复
                                 continue
                             if ss in tp[n] and tp[n][ss]!=w: # 处理同物品不同value
