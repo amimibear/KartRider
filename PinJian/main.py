@@ -42,16 +42,22 @@ while os.path.exists(f'data/data{N}.txt'):
     N += 1
 
 # 每次读最新的，没有筛选也没关系，之后通过delete.py直接筛掉
+# 没有筛选会让错误的数值留下了，对的进不去，因为重复的直接忽略
 for n in range(2):
-    reader = csv.reader(open(f"danpin{n}.csv"))
-    for row in reader:
-        if row[0] in dp[n]:
-            print('wait!!!!!!!!!!!')
-        dp[n][row[0]]=int(row[1])
-
-    reader = csv.reader(open(f"taopin{n}.csv"))
-    for row in reader:
-        tp[n][row[0]]=int(row[1])
+    for i in range(1000,0,-1): # 找第一个.1(权威认证)
+        if os.path.exists(f"danpin{n}.{i}.1.csv"):
+            reader = csv.reader(open(f"danpin{n}.{i}.1.csv"))
+            for row in reader:
+                assert(not row[0] in dp[n]) # 权威认证中无重复
+                dp[n][row[0]]=int(row[1])
+            break
+    for i in range(1000,0,-1): # 找第一个.1(权威认证)
+        if os.path.exists(f"taopin{n}.{i}.1.csv"):
+            reader = csv.reader(open(f"taopin{n}.{i}.1.csv"))
+            for row in reader:
+                assert(not row[0] in tp[n]) # 权威认证中无重复
+                tp[n][row[0]]=int(row[1])
+            break
 
 reader = csv.reader(open("delete.csv"))
 for row in reader:
@@ -69,7 +75,7 @@ ff = open(f'data/data{N}.txt', 'w')
 # 225
 # PaddleOCR(rec_model_dir='ch_PP-OCRv4_rec_server_infer', det_model_dir='ch_PP-OCRv4_det_server_infer')
 
-# 237
+# 305 new
 
 id0 = int(open(f'img/_ok.txt', 'r').read())+1
 
@@ -98,7 +104,7 @@ f = [lambda x:ocr1.ocr(x, cls=False),
      lambda x:ocr3.ocr(x, cls=False),
      lambda x:ocr3.ocr(x[:-1], cls=False)]
 
-test = 1
+test = 0
 
 if test:
     id0 -= 100000
@@ -113,7 +119,8 @@ for id in range(id0,10000000):
             id1 = int(fr.read())
         except:
             pass
-    # print(id)
+    if not test:
+        print(id)
     # result = ocr.ocr(f'img/{id}.png', cls=False)
     if not os.path.exists(f'img/{id}.png'):
         if id>id1-3: # 到前沿了
