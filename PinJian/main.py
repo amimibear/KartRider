@@ -1,11 +1,14 @@
 import numpy as np
 from PIL import Image
+import io
 # import easyocr
 from itertools import groupby
 import re
 import csv
 import time
 import os
+from datetime import datetime
+
 from paddleocr import PaddleOCR
 import paddleocr
 print(paddleocr.__version__)
@@ -15,6 +18,73 @@ print(paddleocr.__version__)
 # 41 30733 开始
 # time.sleep(10)
 # 77 开始几乎不留图 但要注意data里重复的!!!
+
+
+import base64
+import urllib
+import requests
+
+API_KEY = "FDFllVs3NVceP57oF2lkHSGF"
+SECRET_KEY = "2NFAtZGj32esWgdI9hOVBqYg6nhvLiH3"
+
+def baidu(arr):
+    # image 可以通过 get_file_content_as_base64("C:\fakepath\kui.png",True) 方法获取
+    
+    # 标准版
+    # url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic?access_token=" + get_access_token()
+    # payload='detect_direction=false&detect_language=false&paragraph=false&probability=false&image='+array2base64(arr,True)
+    
+    # 高精度版
+    url = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=" + get_access_token()
+    payload='detect_direction=false&paragraph=false&probability=false&image='+array2base64(arr,True)
+    
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+    }
+    
+    response = requests.request("POST", url, headers=headers, data=payload)
+    
+    print(response.text)
+    print(response.text,file=ff)
+    return response.json()
+    
+
+def array2base64(arr, urlencoded=False):
+    """
+    将numpy数组转换为base64编码
+    :param arr: numpy数组
+    :return: base64编码
+    """
+    image = Image.fromarray(arr)
+
+    # 创建一个内存缓冲区
+    buffer = io.BytesIO()
+
+    # 将图像保存到内存缓冲区中
+    image.save(buffer, format='PNG')
+    if test:
+        image.save(f"{id}.png")
+
+    # 获取缓冲区的字节数据
+    buffer.seek(0)
+    image_bytes = buffer.getvalue()
+    content = base64.b64encode(image_bytes).decode("utf8")
+    if urlencoded:
+        content = urllib.parse.quote_plus(content)
+    return content
+
+def get_access_token():
+    """
+    使用 AK，SK 生成鉴权签名（Access Token）
+    :return: access_token，或是None(如果错误)
+    """
+    url = "https://aip.baidubce.com/oauth/2.0/token"
+    params = {"grant_type": "client_credentials", "client_id": API_KEY, "client_secret": SECRET_KEY}
+    return str(requests.post(url, params=params).json().get("access_token"))
+
+
+
 
 # im = ImageGrab.grab()  # X1,Y1,X2,Y2
 # for i in range(10):
@@ -104,25 +174,29 @@ f = [lambda x:ocr1.ocr(x, cls=False),
      lambda x:ocr2.ocr(x, cls=False),
      lambda x:ocr2.ocr(x[:-1], cls=False),
      lambda x:ocr3.ocr(x, cls=False),
-     lambda x:ocr3.ocr(x[:-1], cls=False)]
+     lambda x:ocr3.ocr(x[:-1], cls=False),
+     baidu]
 
-test = 1
+test = 0
 
 if test:
     id0 -= 100000
-    id0 = 4716253
+    id0 = 341287
 for id in range(id0,10000000):
 # for id in range(4671788,4671789):
-    # print(f'\n{id}')
+    if not test:
+        print(f'\n{id}')
     print(f'\n{id}',file=ff)
-    
+
+    current_time = datetime.now()
+    formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+    print(formatted_time)
+    print(formatted_time,file=ff)
     with open(f'img/_.txt', 'r') as fr:
         try:
             id1 = int(fr.read())
         except:
             pass
-    if not test:
-        print(id)
     # result = ocr.ocr(f'img/{id}.png', cls=False)
     if not os.path.exists(f'img/{id}.png'):
         if id>id1-3: # 到前沿了
@@ -135,14 +209,19 @@ for id in range(id0,10000000):
         if not os.path.exists(f'img/{id}.png'):
             if not test:
                 print('no img!')
+                print('no img!',file=ff)
         image = Image.open(f'img/{id}.png')
         if image.size != (850,950):
             crop_area = (400, 0, 1250, 950) # 定义裁剪区域 (x1, y1, x2, y2)
             image = image.crop(crop_area)
         RGB = np.array(image.convert('RGB'))
-        if not test:
-            os.remove(f"img/{id}.png") # 如果有新增，最后再保存回去
+        # if not test:
+        #     os.remove(f"img/{id}.png") # 如果有新增，最后再保存回去 中途停止会丢失数据
         if not np.any(np.all(RGB == [237, 163, 163], axis=-1)):
+            if not test:
+                os.remove(f"img/{id}.png")
+            print('no pink!')
+            print('no pink!',file=ff)
             continue
     
         
@@ -150,11 +229,13 @@ for id in range(id0,10000000):
         if test:
             continue
         print('fail!')
+        print('fail!',file=ff)
         if os.path.exists(f'img/{id}.png'):
-            print('remove')
+            print('remove!')
             os.remove(f"img/{id}.png")
         continue
-    print(f'\n{id}')
+    if test:
+        print(f'\n{id}')
     def find_blocks_with_conditions(arr, b_range=(251, 253)):
         b_in_range = np.logical_and(arr[:, -1, 2] >= b_range[0], arr[:, -1, 2] <= b_range[1])
         blocks = np.split(arr, np.where(np.diff(b_in_range) == 1)[0] + 1)
@@ -163,17 +244,22 @@ for id in range(id0,10000000):
     
     add = 0
     byy = 0 #是否有不一样的
+    save = 0 # 进入baidu的都save
     
-    for k in range(6):
-        print('ocr ',k)
-        print('ocr ',k,file=ff)
+    for k in range(7):
+        print('ocr',k)
+        print('ocr',k,file=ff)
         brk = 0
         ll = [[],[]]
         valid_blocks = find_blocks_with_conditions(RGB)
         for block in valid_blocks:
             result = f[k](block)
             try:
-                s = ''.join([line[1][0] for res in result for line in res])
+                if k==len(f)-1:
+                    save = 1 # 用baidu就save
+                    s = ''.join([line['words'] for line in result['words_result']])
+                else:
+                    s = ''.join([line[1][0] for res in result for line in res])
                 if "冰雪之歌" in s:
                     ll[0].append(s)
                 if "夜行骑士" in s:
@@ -240,6 +326,7 @@ for id in range(id0,10000000):
                         '手特':'手持','剪者':'勇者','龟电':'龟甲','统师':'统帅','愧木':'傀木','酉长':'酋长','飘虫':'瓢虫','撩牙':'獠牙',
                         '库呀':'库伢','库牙':'库伢','库讶':'库伢','吃语':'呓语','烊烊':'咩咩咩','垂髻':'垂髫'},
                     3:{'迷夜翼':'迷璘夜翼','烊烊烊':'咩咩咩'}}
+                    # 3:{}}
                 for size in range(3,0,-1):
                     for i in range(len(s)-size+1):
                         w = s[i:i+size]
@@ -309,8 +396,6 @@ for id in range(id0,10000000):
                             ls = t[-1]
                             t = []
 
-                            
-
                             if int(w)>200:
                                 if w[0]=='1': #三位数
                                     t.append(w[3:])
@@ -318,23 +403,7 @@ for id in range(id0,10000000):
                                 else: #两位数
                                     t.append(w[2:])
                                     w = w[:2]
-
-                            
-                            # if len(t)!=1:
-                            #     print(id,'too long ',ss,' ! ',s)
-
-                            # 后续跟1的情况暂不考虑
-                            # if int(w)>200 and w[-1]=='1':
-                            #     w = w[:-1]
                             w = int(w)
-                            
-
-                            # if sp and sp[0]=='套':
-                            #     sp = sp[1:]
-                            # if sp and sp[0]=='品':
-                            #     sp = sp[1:]
-                            #     if sp and sp[0]==' ':
-                            #         sp = sp[1:]
                             
                             print(f'dp{n} {ss},{w}')
                             print(f'dp{n} {ss},{w}',file=ff)
@@ -357,6 +426,7 @@ for id in range(id0,10000000):
                                     print(f'\nbyy!!! {ss} old:{dp[n][ss]} new:{w} 留old\n')
                                     ff.write(f'\nbyy!!! {ss} old:{dp[n][ss]} new:{w} 留old\n')
                                     byy = 1
+                                    save = 1 # 不一样的也save
                                 continue
                             print('add?')
                             print('add?',file=ff)
@@ -434,13 +504,23 @@ for id in range(id0,10000000):
             # with open('del_img.txt', 'a') as f:
             #     f.seek(0,2)
             #     f.write(str(i)+'\n')
-    if add or byy: 
-        image.save(f'img/{id}.png')
+    if save: 
+        # image.save(f'img/{id}.png')
         if not add:
             print('no add!')
             print('no add!',file=ff)
+        if byy:
+            print('byy!')
+            print('byy!',file=ff)
+        else: #不是byy save的话，肯定是到最后一轮了
+            print('baidu!') # ocr 6
+            print('baidu!',file=ff)
         print('save!')
         print('save!',file=ff)
+    else:
+        print('remove!')
+        print('remove!',file=ff)
+        os.remove(f"img/{id}.png")
     if not test:
         open('img/_ok.txt', 'w').write(str(id))
 
