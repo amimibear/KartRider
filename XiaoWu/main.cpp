@@ -6,7 +6,7 @@ using namespace std;
 #define N 26 //小屋边长
 
 int o=0,a[N+2][N+2],s,f[9][600],g[9],m=130000;
-int xh[100],yh[100],dh[100];
+int xh[100],yh[100],dh[100],oh[100];
 int check(int h);
 void init();
 
@@ -29,17 +29,17 @@ void init();
 
 // 修改以下部分
 int BB = 0; //8*8个数
-int FJ = 2; //林中飞机个数
+int FJ = 5; //林中飞机个数
 int JT = 0; //神翼祭坛个数
 int TL = 0; //精灵塔楼个数
 int ZX = 1; //臻享环绕个数
-int XX = 2; //小新雕像个数
+int XX = 0; //小新雕像个数
 int PZB =0; //拍照板个数
 int MG = 0; //有无魔怪
 int CB = 0; //有无怪诞城堡
-int YL = 0; //有无永恒之月
+int YL = 1; //有无永恒之月
 int MT = 0; //有无魔毯
-int XK = 0; //有无新秀相框（不影响布局）
+int XK = 1; //有无新秀相框（不影响布局）
 int DZ = 0; //音阶地砖个数（不影响布局，铺满为169）
 int LP = 10; //我的小屋路牌个数（默认足够）
 int HYB = 10; //sonic合影板个数（默认足够）
@@ -79,7 +79,7 @@ int main()
         {
             n[1]=N*N-80-64*n[8]-49*n[7]-36*n[6]-25*n[5]-20*n[0]-16*n[4]-9*n[3]-4*n[2];
             if(n[1]>=10) continue; // 卡在某个1很多的时候，可以先加上这个行运行一遍（然后把最高数值代入m，把这行去掉再运行一遍以保证完备性）
-            int ff=9400+4360+4394+20230-148*(1-XK)-2*(169-DZ);//小屋+背景+地砖+室内
+            int ff=9400+4360+4394+26944-148*(1-XK)-2*(169-DZ);//小屋+背景+地砖+室内（20230->26944）
             for(int i=0;i<=8;i++) ff+=f[i][n[i]];
             if(ff>=m&&oo)// >
             {
@@ -106,13 +106,13 @@ int main()
                     for(int i=8;i>=0;i--) cout<<i<<':'<<n[i]<<' '; cout<<endl;
                     int num=0;
                     for(int i=0;i<=8;i++) num+=n[i];
-                    for(int i=0;i<num;i++) cout<<dh[i]<<' '<<xh[i]<<' '<<yh[i]<<endl;
+                    for(int i=0;i<num;i++) cout<<dh[i]<<' '<<xh[i]<<' '<<yh[i]<<' '<<oh[i]<<endl;
                     cout<<endl;
                     
                     ofstream fout;
                     fout.open("out.txt",ios::out);
                     fout<<num<<endl;
-                    for(int i=0;i<num;i++) fout<<dh[i]<<' '<<xh[i]<<' '<<yh[i]<<endl;
+                    for(int i=0;i<num;i++) fout<<dh[i]<<' '<<xh[i]<<' '<<yh[i]<<' '<<oh[i]<<endl;
                     fout<<ff<<endl;
                     fout.close();
                 }
@@ -135,7 +135,7 @@ int check(int h)
     int md=min(dx,dy);
     if(x<10&&y<5) md=min(md,max(10-x,5-y)); //考虑出生点阻挡
     
-    xh[h]=x;yh[h]=y;
+    xh[h]=x;yh[h]=y;oh[h]=0;
     
     for(int d=md;d>=1;d--) if(g[d])
     {
@@ -154,6 +154,7 @@ int check(int h)
         if(dx>=4&&dy>=5&& !(x<10&&y<5&&x+4>10&&y+5>5))
         {
             dh[h]=0;
+            oh[h]=1;
             for(int i=x;i<x+4;i++) for(int j=y;j<y+5;j++) a[i][j]=1;
             s-=4*5;
             g[0]--;
@@ -166,6 +167,7 @@ int check(int h)
         if(dx>=5&&dy>=4&& !(x<10&&y<5&&x+5>10&&y+4>5))
         {
             dh[h]=0;
+            oh[h]=2;
             for(int i=x;i<x+5;i++) for(int j=y;j<y+4;j++) a[i][j]=1;
             s-=5*4;
             g[0]--;
