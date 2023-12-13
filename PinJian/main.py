@@ -384,8 +384,8 @@ for id in range(id0,10000000):
                     if name in double[n] and num in double[n][name]: # 两个值的
                         break
                     if name in dp[n] and dp[n][name]==num: # 重复
-                        if not os.path.exists(f'数据来源/{title[n]} 单品/{name}.png'):
-                            image.save(f'数据来源/{title[n]} 单品/{name}.png')
+                        if not os.path.exists(f'数据来源/{title[n]} 单品/{num},{name}.png'):
+                            image.save(f'数据来源/{title[n]} 单品/{num},{name}.png')
                         break
                     if name in dp[n] and dp[n][name]!=num: # 处理同物品不同value 不继续识别了 之后看怎么回事
                         print(f'\nbyy!!! {name} old:{dp[n][name]} new:{num} 留old\n')
@@ -444,8 +444,8 @@ for id in range(id0,10000000):
                         add = 1
                         print('add!')
                         print('add!',file=ff)
-                        if not os.path.exists(f'数据来源/{title[n]} 套品/{name}.png'):
-                            image.save(f'数据来源/{title[n]} 套品/{name}.png')
+                        if not os.path.exists(f'数据来源/{title[n]} 套品/{num},{name}.png'):
+                            image.save(f'数据来源/{title[n]} 套品/{num},{name}.png')
                         Image.fromarray(line).save(f"new/tp{n}_{name},{num}.png")
     if bd or byy: 
         # image.save(f'img/{id}.png')
@@ -485,7 +485,7 @@ for id in range(id0,10000000):
         temp_filename = f"{filename}.tmp"
         with open(temp_filename, "w", newline='') as f:
             for name, num in data:
-                f.write(f'{name},{num}![](new/{pre}_{name},{num}.png)\n')
+                f.write(f'{name},{num}![](new/{pre}_{name},{num}.png)\n  ')
         os.replace(temp_filename, filename)
 
     for n in range(2):
