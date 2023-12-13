@@ -106,9 +106,9 @@ dpp = [{},{}] # danpin+ 给用户呈现的时候筛一遍
 tpm = [{},{}] # 去、
 # 这些东西竟然有两个品鉴值
 double = [{'多彩气球炫光':[44,45],'汽车之家气球':[39,42],'黑妞生日气球':[36,43],'跑跑新生服饰':[27,34],'跑跑新生发型':[26,27],
-          '礼花气球':[44,53],'章鱼气球':[37,47],'经典校服':[28,34],'南瓜假面':[39,59],'正义牛仔帽(男)':[37,39],'仙人掌气球':[43,51],'正义牛仔帽(女)':[36,37]},
+          '礼花气球':[44,53],'章鱼气球':[37,47],'经典校服':[28,34],'南瓜假面':[39,59],'正义牛仔帽(男)':[37,39],'仙人掌气球':[43,51],'正义牛仔帽(女)':[36,37],'精灵炫光':[56,57]},
           {'礼花气球':[38,52],'仙人掌气球':[39,50],'章鱼气球':[35,50],'多彩气球炫光':[45,47],'黑妞生日气球':[34,40],'小丑气球':[36,39],
-          '汽车之家气球':[32,37],'南瓜假面':[35,84],'跑跑新生服饰':[21,22],'跑跑新生发型':[15,16],'正义牛仔帽(男)':[34],'正义牛仔帽(女)':[34,36]}] # 期待 正义牛仔帽(男),32 
+          '汽车之家气球':[32,37],'南瓜假面':[35,84],'跑跑新生服饰':[21,22],'跑跑新生发型':[15,16],'正义牛仔帽(男)':[34],'正义牛仔帽(女)':[34,36],'经典校服':[22,25]}] # 期待 正义牛仔帽(男),32 
 
 # 特殊情况 空格被删 屏蔽词
 special = {'FormulaE气球':'Formula E 气球','Formula E气球':'Formula E 气球'}#,'黑杰克**喷漆','腾讯***孩帽','腾讯***孩装'}
@@ -131,7 +131,7 @@ def read_csv(file, diff={}):
         d[name] = num
     return d
 
-def read_md(file, diff={}):
+def read_md(file):
     d = {}
     with open(file, 'r') as f:
         for line in f:
@@ -144,13 +144,13 @@ def read_md(file, diff={}):
 # 每次读最新的，没有筛选也没关系，之后通过delete.py直接筛掉
 # 没有筛选会让错误的数值留下了，对的进不去，因为重复的直接忽略
 for n in range(2):
-    for i in range(1000,0,-1): # 找第一个.1(权威认证)
-        if os.path.exists(f"danpin{n}.{i}.1.csv"):
-            dp[n] = read_csv(f"danpin{n}.{i}.1.csv")
+    for i in range(1000,0,-1): # 找第一个(权威认证)
+        if os.path.exists(f"danpin{n}.{i}.csv"):
+            dp[n] = read_csv(f"danpin{n}.{i}.csv")
             break
-    for i in range(1000,0,-1): # 找第一个.1(权威认证)
-        if os.path.exists(f"taopin{n}.{i}.1.csv"):
-            tp[n] = read_csv(f"taopin{n}.{i}.1.csv")
+    for i in range(1000,0,-1): # 找第一个(权威认证)
+        if os.path.exists(f"taopin{n}.{i}.csv"):
+            tp[n] = read_csv(f"taopin{n}.{i}.csv")
             break
     for name in tp[n]:
         tpm[n][name.replace('、','')]=tp[n][name]
@@ -479,7 +479,6 @@ for id in range(id0,10000000):
         with open(temp_filename, "w", newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerows(data)
-
         os.replace(temp_filename, filename)
     
     def write_md(filename, data, pre):
