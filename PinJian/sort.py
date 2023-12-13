@@ -11,7 +11,7 @@ for n in range(2):
     reader = csv.reader(open(f"danpin{n}.csv"))
     for row in reader:
         if row[0] in dp:
-            print('重复!',row)
+            print('重复!',row,dp[row[0]])
             continue
         dp[row[0]]=int(row[1])
 
@@ -44,7 +44,7 @@ for n in range(2):
         reader = csv.reader(f)
         for row in reader:
             if row[0] in tp:
-                print(row)
+                print('重复!',row,tp[row[0]])
                 continue
             tp[row[0]]=int(row[1])
     with open(f"taopin{n}.csv", "w") as f:
