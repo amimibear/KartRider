@@ -25,7 +25,7 @@ d = {
     '汉服套装服饰 女':'汉服套装服饰(女)',
     '汉服套装服饰男':'汉服套装服饰(男)',
     '汉服套装发型男':'汉服套装发型(男)',
-    '古风竞技服饰女':'古风竞技服饰(女)',
+    '古风竞技服饰女':'古风竞技套装(女)',
     '古风竞技头套女':'古风竞技头套(女)',
     '真。猫爪气球':'真·猫爪气球',
     '磨菇气球':'蘑菇气球',
@@ -155,7 +155,6 @@ for n in range(2):
 
     writer = csv.writer(open(f"danpin{n}+.csv", "w"))
     writer.writerows(sorted(list(dp[n].items()),key=lambda x:(-x[1],x[0])))
-    shutil.copy(f"danpin{n}+.csv",f"{title[n]}单品.csv")
 
 # write_md.py
 from datetime import datetime
