@@ -2,6 +2,7 @@
 
 import csv
 import shutil
+import time
 
 def add(dp, dp0): # 往dp里加dp0
     for name in dp0:
@@ -153,8 +154,9 @@ for n in range(2):
             continue
         dp[n][row[0]]=int(row[1])
 
-    writer = csv.writer(open(f"danpin{n}+.csv", "w"))
-    writer.writerows(sorted(list(dp[n].items()),key=lambda x:(-x[1],x[0])))
+    with open(f"danpin{n}+.csv", "w") as file:
+        writer = csv.writer(file)
+        writer.writerows(sorted(list(dp[n].items()),key=lambda x:(-x[1],x[0])))
 
 # write_md.py
 from datetime import datetime
