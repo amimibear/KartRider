@@ -426,6 +426,8 @@ for id in range(id0,10000000):
                         break
                     if name.replace('、','') in tpm[n]: # 去、
                         break
+                    if name[0]==')': # 越界
+                        break
                     brk = 0
                     for nm in tp[n]:
                         if name in nm and num==tp[n][nm]:
