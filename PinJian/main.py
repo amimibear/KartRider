@@ -495,11 +495,11 @@ for id in range(id0,10000000):
         danpin_data = sorted(list(dp0[n].items()), key=lambda x: (-x[1], x[0]))
         write_md(f"danpin{n}.md", danpin_data, f'dp{n}')
         danpin_data = sorted(list(set(dp0[n].items())-set(dpp[n].items())), key=lambda x: (-x[1], x[0]))
-        write_md(f"{title[n]}单品新增(未处理).md", danpin_data, f'dp{n}')
+        write_md(f"未处理_{title[n]}单品新增.md", danpin_data, f'dp{n}')
 
         taopin_data = sorted(list(tp0[n].items()), key=lambda x: (-x[1], x[0]))
         write_md(f"taopin{n}.md", taopin_data, f'tp{n}')
-        write_md(f"{title[n]}套品新增(未处理).md", taopin_data, f'tp{n}')
+        write_md(f"未处理_{title[n]}套品新增.md", taopin_data, f'tp{n}')
     
     if test:
         break

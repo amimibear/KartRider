@@ -3,6 +3,7 @@
 import csv
 import shutil
 import time
+import os
 
 def add(dp, dp0): # 往dp里加dp0
     for name in dp0:
@@ -169,12 +170,15 @@ dp = [open('danpin0+.csv','r').read(),open('danpin1+.csv','r').read()]
 lt = [len(tp[0].split('\n'))-1,len(tp[1].split('\n'))-1]
 ld = [len(dp[0].split('\n'))-1,len(dp[1].split('\n'))-1]
 fw.write(f'# 藏珍馆 单品/套品品鉴（冰雪之歌+夜行骑士）\nby 啊咪咪小熊  \n更新时间: {formatted_time}  \n原理: 用adb在安卓客户端上实时对世界频道截图传到电脑，然后用PaddleOCR读取文字信息并处理。  \n图集见[【品鉴图集】（By 酥诺）](https://docs.qq.com/sheet/DZldVdXNmZHR2TXpC)  \n欢迎大家在选单品时拉到最底部把已鉴定单品截图，共享到[品鉴运势截图 远程收集](https://docs.qq.com/sheet/DR1JkTHF1RlNzUEFj)里，数据会被统计进来。  \n\n\
-主要数据文件:  \n冰雪之歌套品.csv  ({lt[0]}个)  \n冰雪之歌单品.csv  ({ld[0]}个)  \n夜行骑士套品.csv  ({lt[1]}个)  \n夜行骑士单品.csv  ({ld[1]}个)  \n\n\
-## 冰雪之歌套品\n套品数据来自世界频道  \n\n冰雪之歌套品.csv: ({lt[0]}个)\n```\n'+tp[0]+f'```\n\n## 冰雪之歌单品\n单品数据来自世界频道(danpin0.csv)和图集(tuji0.csv)  \n注:有些物品会有重名(多彩气球炫光、汽车之家气球、黑妞生日气球、跑跑新生服饰、跑跑新生发型、礼花气球、章鱼气球、经典校服、南瓜假面、正义牛仔帽(男)、正义牛仔帽(女)、仙人掌气球、小丑气球)，这些物品名后面加了[]以作区分  \n\n冰雪之歌单品.csv: ({ld[0]}个)\n```\n'+dp[0]+f'```\n\
-## 夜行骑士套品\n套品数据来自世界频道  \n\n夜行骑士套品.csv: ({lt[1]}个)\n```\n'+tp[1]+f'```\n\n## 夜行骑士单品\n单品数据来自世界频道(danpin0.csv)和图集(tuji0.csv)  \n注:有些物品会有重名(多彩气球炫光、汽车之家气球、黑妞生日气球、跑跑新生服饰、跑跑新生发型、礼花气球、章鱼气球、经典校服、南瓜假面、正义牛仔帽(男)、正义牛仔帽(女)、仙人掌气球、小丑气球)，这些物品名后面加了[]以作区分  \n\n夜行骑士单品.csv: ({ld[1]}个)\n```\n'+dp[1]+'```')
-for n in range(2):
-    open(f'{title[n]}单品.csv','w').write(dp[n])
-    open(f'{title[n]}套品.csv','w').write(tp[n])
+主要数据文件:  \n冰雪之歌套品{lt[0]}.csv  \n冰雪之歌单品{ld[0]}.csv  \n夜行骑士套品{lt[1]}.csv  \n夜行骑士单品{ld[1]}.csv  \n\n\
+## 冰雪之歌套品\n套品数据来自世界频道  \n\n冰雪之歌套品{lt[0]}.csv: \n```\n'+tp[0]+f'```\n\n## 冰雪之歌单品\n单品数据来自世界频道(danpin0.csv)和图集(tuji0.csv)  \n注:有些物品会有重名(多彩气球炫光、汽车之家气球、黑妞生日气球、跑跑新生服饰、跑跑新生发型、礼花气球、章鱼气球、经典校服、南瓜假面、正义牛仔帽(男)、正义牛仔帽(女)、仙人掌气球、小丑气球)，这些物品名后面加了[]以作区分  \n\n冰雪之歌单品{ld[0]}.csv:  \n```\n'+dp[0]+f'```\n\
+## 夜行骑士套品\n套品数据来自世界频道  \n\n夜行骑士套品{lt[1]}.csv: \n```\n'+tp[1]+f'```\n\n## 夜行骑士单品\n单品数据来自世界频道(danpin0.csv)和图集(tuji0.csv)  \n注:有些物品会有重名(多彩气球炫光、汽车之家气球、黑妞生日气球、跑跑新生服饰、跑跑新生发型、礼花气球、章鱼气球、经典校服、南瓜假面、正义牛仔帽(男)、正义牛仔帽(女)、仙人掌气球、小丑气球)，这些物品名后面加了[]以作区分  \n\n夜行骑士单品{ld[1]}.csv:  \n```\n'+dp[1]+'```')
+
+# 把所有以'冰雪之歌'或'夜行骑士'开头的文件移到'old'文件夹里
+for filename in os.listdir():
+    if filename.startswith('冰雪之歌') or filename.startswith('夜行骑士'):
+        shutil.move(filename, 'old')
+
 for n in range(2):
     open(f'{title[n]}单品{ld[n]}.csv','w').write(dp[n])
     open(f'{title[n]}套品{lt[n]}.csv','w').write(tp[n])
