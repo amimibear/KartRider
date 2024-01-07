@@ -177,7 +177,7 @@ fw.write(f'# 藏珍馆 单品/套品品鉴（冰雪之歌+夜行骑士）\nby �
 # 把所有以'冰雪之歌'或'夜行骑士'开头的文件移到'old'文件夹里
 for filename in os.listdir():
     if filename.startswith('冰雪之歌') or filename.startswith('夜行骑士'):
-        shutil.move(filename, 'old')
+        shutil.move(filename, 'old/'+filename)
 
 for n in range(2):
     open(f'{title[n]}单品{ld[n]}.csv','w').write(dp[n])
