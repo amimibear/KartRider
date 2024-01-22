@@ -21,7 +21,8 @@ for n in range(2):
     for row in reader:
         dp[n][row[0]]=int(row[1])
 
-reader = csv.reader(open("【品鉴图集】（By 酥诺）-①冰雪 单品.csv"))
+filename = '【品鉴大全】（By 酥诺）-①冰雪 单品.csv'
+reader = csv.reader(open(filename))
 d = {
     '小丑气球':'小丑气球[红头发]',
     '汉服套装服饰 女':'汉服套装服饰(女)',
@@ -182,6 +183,9 @@ for filename in os.listdir():
 for n in range(2):
     open(f'{title[n]}单品{ld[n]}.csv','w').write(dp[n])
     open(f'{title[n]}套品{lt[n]}.csv','w').write(tp[n])
+
+import datetime
+shutil.copyfile(filename, filename[-4]+datetime.datetime.now().strftime("%Y-%m-%d")+'.csv')
 
 
 # CP联赛魅力金炫光 62

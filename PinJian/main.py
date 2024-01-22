@@ -30,6 +30,8 @@ import base64
 import urllib
 import requests
 
+imgpath = '/Users/xiaoxiong/Downloads/img'
+
 API_KEY = "FDFllVs3NVceP57oF2lkHSGF"
 SECRET_KEY = "2NFAtZGj32esWgdI9hOVBqYg6nhvLiH3"
 
@@ -180,7 +182,7 @@ fmd = open(f'fmd.md', 'w')
 
 # 305 new
 
-id0 = int(open(f'img/_ok.txt', 'r').read())+1
+id0 = int(open(f'_ok.txt', 'r').read())+1
 
 # id0 = 47101
 # reader = easyocr.Reader(['ch_sim','en']) 
@@ -219,35 +221,35 @@ for id in range(id0,10000000):
     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
     print(formatted_time)
     print(formatted_time,file=ff)
-    with open(f'img/_.txt', 'r') as fr:
+    with open(f'_.txt', 'r') as fr:
         try:
             id1 = int(fr.read())
         except:
             pass
-    # result = ocr.ocr(f'img/{id}.png', cls=False)
-    if not os.path.exists(f'img/{id}.png'):
+    # result = ocr.ocr(f'{imgpath}/{id}.png', cls=False)
+    if not os.path.exists(f'{imgpath}/{id}.png'):
         if id>id1-3: # 到前沿了
-            while not os.path.exists(f'img/{id}.png'):
+            while not os.path.exists(f'{imgpath}/{id}.png'):
                 print('wait')
                 time.sleep(1)
     try:
         if id>id1-3:
             time.sleep(2) # 前沿不能太快，可能有文件但是没存好
-        if not os.path.exists(f'img/{id}.png'):
+        if not os.path.exists(f'{imgpath}/{id}.png'):
             if not test:
                 print('no img!')
                 print('no img!',file=ff)
-        image = Image.open(f'img/{id}.png')
+        image = Image.open(f'{imgpath}/{id}.png')
         if image.size != (650,950): # from S28
             crop_area = (400, 0, 1050, 950) # 定义裁剪区域 (x1, y1, x2, y2)
             image = image.crop(crop_area)
         RGB = np.array(image.convert('RGB'))
         # if not test:
-        #     os.remove(f"img/{id}.png") # 如果有新增，最后再保存回去 中途停止会丢失数据
+        #     os.remove(f"{imgpath}/{id}.png") # 如果有新增，最后再保存回去 中途停止会丢失数据
         if not np.any(np.all(RGB == [227, 104, 80], axis=-1)):
             if not test:
-                os.remove(f"img/{id}.png")
-                open('img/_ok.txt', 'w').write(str(id))
+                os.remove(f"{imgpath}/{id}.png")
+                open('_ok.txt', 'w').write(str(id))
             print('no red!')
             print('no red!',file=ff)
             continue
@@ -258,9 +260,9 @@ for id in range(id0,10000000):
             continue
         print('fail!')
         print('fail!',file=ff)
-        if os.path.exists(f'img/{id}.png'):
+        if os.path.exists(f'{imgpath}/{id}.png'):
             print('remove!')
-            os.remove(f"img/{id}.png")
+            os.remove(f"{imgpath}/{id}.png")
         continue
     if test:
         print(f'\n{id}')
@@ -426,7 +428,7 @@ for id in range(id0,10000000):
                         break
                     if name.replace('、','') in tpm[n]: # 去、
                         break
-                    if name[0]==')': # 越界
+                    if name[0] in [')','、']: # 越界
                         break
                     brk = 0
                     for nm in tp[n]:
@@ -450,7 +452,7 @@ for id in range(id0,10000000):
                             image.save(f'数据来源/{title[n]} 套品/{num},{name}.png')
                         Image.fromarray(line).save(f"new/tp{n}_{name},{num}.png")
     if bd or byy: 
-        # image.save(f'img/{id}.png')
+        # image.save(f'{imgpath}/{id}.png')
         if add:
             print('add!')
             print('add!',file=ff)
@@ -469,9 +471,9 @@ for id in range(id0,10000000):
         print('remove!')
         print('remove!',file=ff)
         if not test:
-            os.remove(f"img/{id}.png")
+            os.remove(f"{imgpath}/{id}.png")
     if not test:
-        open('img/_ok.txt', 'w').write(str(id))
+        open('_ok.txt', 'w').write(str(id))
 
     # print(dp,'\n',tp,'\n')
 

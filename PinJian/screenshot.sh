@@ -2,10 +2,10 @@
 
 # 修改这个值为您想要的开始整数N
 
-number_file="img/_.txt"
+number_file="_.txt"
 
 # 指定Mac上保存截图的目录
-destination_folder="img"
+destination_folder="/Users/xiaoxiong/Downloads/img"
 
 # 每隔1秒截图
 while true; do
