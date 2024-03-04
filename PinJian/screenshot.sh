@@ -24,8 +24,10 @@ while true; do
   # adb -s 192.168.101.135:5555 exec-out screencap -p > "$destination_folder/$current_number.png"
   # adb -s 192.168.101.245:5555 exec-out screencap -p > "$destination_folder/$current_number.png"
   
-  adb -s H8B4C19716005860 exec-out screencap -p > "$destination_folder/$current_number.png"
 
+  adb exec-out screencap -p > "$destination_folder/$current_number.png"
+
+  # adb -s H8B4C19716005860 exec-out screencap -p > "$destination_folder/$current_number.png"
 
   next_number=$((current_number + 1))
   echo $next_number > "$number_file"
