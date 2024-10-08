@@ -33,8 +33,8 @@ d = { # 纠正图集中不规范的名字
     '甜梦回声装(女)':'甜梦回声装',
      '托尔夏季喷漆':'托尔季夏喷漆', # 重复
      '\'鹦鹉气球':'鹦鹉气球', # 去 ‘鹦鹉气球
-     '仙人掌气球[1](蓝)':'仙人掌气球[蓝]',
-     '仙人掌气球[2](黄)':'仙人掌气球[黄]',
+     '仙人掌气球(蓝)':'仙人掌气球[蓝]',
+     '仙人掌气球(黄)':'仙人掌气球[黄]',
     '礼花气球[2]':'礼花气球[传说]', # 去
     '经典校服[1]':'经典校服[2]', # ？
     '经典校服[2]':'经典校服[1]', # ？
@@ -176,16 +176,16 @@ fw.write(f'# 藏珍馆 单品/套品品鉴（冰雪之歌+夜行骑士）\nby �
 ## 夜行骑士套品\n套品数据来自世界频道  \n\n夜行骑士套品{lt[1]}.csv: \n```\n'+tp[1]+f'```\n\n## 夜行骑士单品\n单品数据来自世界频道(danpin0.csv)和图集(tuji0.csv)  \n注:有些物品会有重名(多彩气球炫光、汽车之家气球、黑妞生日气球、跑跑新生服饰、跑跑新生发型、礼花气球、章鱼气球、经典校服、南瓜假面、正义牛仔帽(男)、正义牛仔帽(女)、仙人掌气球、小丑气球)，这些物品名后面加了[]以作区分  \n\n夜行骑士单品{ld[1]}.csv:  \n```\n'+dp[1]+'```')
 
 # 把所有以'冰雪之歌'或'夜行骑士'开头的文件移到'old'文件夹里
-for filename in os.listdir():
-    if filename.startswith('冰雪之歌') or filename.startswith('夜行骑士'):
-        shutil.move(filename, 'old/'+filename)
+for file in os.listdir():
+    if file.startswith('冰雪之歌') or file.startswith('夜行骑士'):
+        shutil.move(file, 'old/'+file)
 
 for n in range(2):
     open(f'{title[n]}单品{ld[n]}.csv','w').write(dp[n])
     open(f'{title[n]}套品{lt[n]}.csv','w').write(tp[n])
 
 import datetime
-shutil.copyfile(filename, filename[-4]+datetime.datetime.now().strftime("%Y-%m-%d")+'.csv')
+shutil.copyfile(filename, filename[:-4]+datetime.datetime.now().strftime("%Y-%m-%d")+'.csv')
 
 
 # CP联赛魅力金炫光 62

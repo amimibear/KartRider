@@ -353,7 +353,8 @@ for id in range(id0,10000000):
                         w = name[i:i+size]
                         if w in m[size]:
                             name = name[:i]+m[size][w]+name[i+size:]
-                if name=='': # '套品'?
+                if len(name)<=1: # '套品'?
+                # if name=='': # '套品'?
                     print('no name!')
                     continue
                 if name[-2]=='(':
